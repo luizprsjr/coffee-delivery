@@ -1,41 +1,26 @@
-import { useRouter } from 'expo-router'
-import { Button, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet } from 'react-native'
+import Animated, { SlideInUp } from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Index() {
-  const router = useRouter()
+  const { top } = useSafeAreaInsets()
 
   return (
-    <View style={styles.container}>
-      <View style={styles.main}>
-        <Text style={styles.title}>Hello World!!!</Text>
-        <Text style={styles.subtitle}>This is the first page of your app.</Text>
-
-        <Button title="splash" onPress={() => router.push('splash')} />
-      </View>
-    </View>
+    <Animated.ScrollView style={styles.container}>
+      <Animated.View
+        entering={SlideInUp.duration(1000)}
+        style={[styles.introContainer, { height: 342 + top }]}
+      ></Animated.View>
+    </Animated.ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    padding: 24,
-    backgroundColor: '#8047F8',
+    backgroundColor: '#FAFAFA',
   },
-  main: {
-    flex: 1,
-    justifyContent: 'center',
-    maxWidth: 960,
-    marginHorizontal: 'auto',
-  },
-  title: {
-    fontSize: 64,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  subtitle: {
-    fontSize: 36,
-    color: '#fff',
+  introContainer: {
+    backgroundColor: '#272221',
   },
 })
