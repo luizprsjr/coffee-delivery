@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "scheme": "acme",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "coffee-delivery",
+    "slug": "coffee-delivery",
+    "splash": {
+      "backgroundColor": "#4B2995"
+    }
+  }
+}
