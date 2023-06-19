@@ -1,6 +1,10 @@
-import { StyleSheet } from 'react-native'
+import { MagnifyingGlass, MapPin, ShoppingCart } from 'phosphor-react-native'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
 import Animated, { SlideInUp } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import CoffeeBeans from '../src/assets/coffee-beans.svg'
+import { theme } from '../src/styles/theme'
 
 export default function Index() {
   const { top } = useSafeAreaInsets()
@@ -10,7 +14,35 @@ export default function Index() {
       <Animated.View
         entering={SlideInUp.duration(1000)}
         style={[styles.introContainer, { height: 342 + top }]}
-      ></Animated.View>
+      >
+        <View>
+          <View style={[styles.headerContainer, { marginTop: top }]}>
+            <View style={styles.locationContainer}>
+              <MapPin size={20} weight="fill" color={theme.colors.purple} />
+              <Text style={styles.locationText}>Barra do Piraí, RJ</Text>
+            </View>
+            <ShoppingCart
+              size={20}
+              weight="fill"
+              color={theme.colors.dark_yellow}
+            />
+          </View>
+
+          <Text style={styles.title}>
+            Encontre o café perfeito para qualquer hora do dia
+          </Text>
+
+          <View style={styles.inputContainer}>
+            <MagnifyingGlass size={16} color={theme.colors.gray_400} />
+            <TextInput
+              style={styles.input}
+              placeholder="Pesquisar"
+              placeholderTextColor={theme.colors.gray_400}
+            ></TextInput>
+          </View>
+          <CoffeeBeans style={{ alignSelf: 'flex-end' }} />
+        </View>
+      </Animated.View>
     </Animated.ScrollView>
   )
 }
@@ -21,6 +53,42 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAFAFA',
   },
   introContainer: {
+    paddingHorizontal: 32,
+    paddingVertical: 28,
     backgroundColor: '#272221',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  locationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  locationText: {
+    color: '#FAFAFA',
+    fontFamily: theme.fonts.regular,
+    fontSize: 14,
+  },
+  title: {
+    marginTop: 48,
+    fontSize: 20,
+    color: 'white',
+    fontFamily: theme.fonts.title,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#403937',
+    padding: 12,
+    borderRadius: 4,
+    marginTop: 15,
+    gap: 8,
+  },
+  input: {
+    color: '#8D8686',
+    fontFamily: theme.fonts.regular,
+    fontSize: 14,
   },
 })
