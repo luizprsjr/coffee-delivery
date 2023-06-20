@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   introContainer: {
     paddingHorizontal: 32,
     paddingVertical: 28,
-    backgroundColor: '#272221',
+    backgroundColor: theme.colors.gray_100,
   },
   headerContainer: {
     flexDirection: 'row',
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   locationText: {
-    color: '#FAFAFA',
+    color: theme.colors.gray_900,
     fontFamily: theme.fonts.regular,
     fontSize: 14,
   },
@@ -74,14 +74,14 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#403937',
+    backgroundColor: theme.colors.gray_200,
     padding: 12,
     borderRadius: 4,
     marginTop: 15,
     gap: 8,
   },
   input: {
-    color: '#8D8686',
+    color: theme.colors.gray_400,
     fontFamily: theme.fonts.regular,
     fontSize: 14,
   },

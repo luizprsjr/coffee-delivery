@@ -7,6 +7,7 @@ import Animated, {
 import { FeaturedCoffeeCard } from '../src/components/featuredCoffeeCard'
 import { Intro } from '../src/components/intro'
 import { FeaturedCoffee } from '../src/data/featured-coffee'
+import { theme } from '../src/styles/theme'
 
 export default function Index() {
   const translateX = useSharedValue(0)
@@ -46,6 +47,6 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFA',
+    backgroundColor: theme.colors.gray_900,
   },
 })

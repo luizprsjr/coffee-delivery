@@ -11,6 +11,7 @@ import Animated, {
 
 import BrandName from '../src/assets/brand-name.svg'
 import Logo from '../src/assets/logo.svg'
+import { theme } from '../src/styles/theme'
 
 const SIZE = Dimensions.get('screen').height + 200
 
@@ -91,13 +92,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#4B2995',
+    backgroundColor: theme.colors.dark_purple,
   },
   animatedBackground: {
     height: SIZE,
     width: SIZE,
     borderRadius: SIZE,
-    backgroundColor: '#8047F8',
+    backgroundColor: theme.colors.purple,
     justifyContent: 'center',
     alignItems: 'center',
   },
