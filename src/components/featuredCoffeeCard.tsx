@@ -1,5 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
-import Animated, { SlideInRight } from 'react-native-reanimated'
+import Animated, {
+  interpolate,
+  SlideInRight,
+  useAnimatedStyle,
+  ZoomIn,
+} from 'react-native-reanimated'
 
 import { FeaturedCoffee } from '../data/featured-coffee'
 import { theme } from '../styles/theme'
@@ -7,30 +12,88 @@ import { theme } from '../styles/theme'
 type ListProps = {
   index: number
   data: (typeof FeaturedCoffee)[0]
+  translateX: Animated.SharedValue<number>
 }
 
-export function FeaturedCoffeeCard({ index, data }: ListProps) {
+export function FeaturedCoffeeCard({ index, data, translateX }: ListProps) {
   const CoffeeImg = data.svg
+
+  const rStyleContainer = useAnimatedStyle(() => {
+    const scale = interpolate(
+      translateX.value,
+      [(index - 1) * 164, index * 164, (index + 1) * 164],
+      [0.8, 1, 0.8],
+    )
+
+    return {
+      transform: [{ scaleY: scale }],
+    }
+  })
+
+  const inverseScale = useAnimatedStyle(() => {
+    const scale = interpolate(
+      translateX.value,
+      [(index - 1) * 164, index * 164, (index + 1) * 164],
+      [1 / 0.8, 1, 1 / 0.8],
+    )
+
+    return {
+      transform: [{ scaleY: scale }],
+    }
+  })
+
+  const rStyle = useAnimatedStyle(() => {
+    const scale = interpolate(
+      translateX.value,
+      [(index - 1) * 164, index * 164, (index + 1) * 164],
+      [0.8, 1, 0.8],
+    )
+
+    return {
+      transform: [{ scale }],
+    }
+  })
+
+  const rImageStyle = useAnimatedStyle(() => {
+    const scale = interpolate(
+      translateX.value,
+      [(index - 1) * 164, index * 164, (index + 1) * 164],
+      [0.85, 1.1, 0.85],
+    )
+
+    return {
+      transform: [{ scale }],
+    }
+  })
 
   return (
     <Animated.View
-      entering={SlideInRight.delay(index * 100 + 1000).duration(800)}
-      style={styles.container}
+      entering={SlideInRight.delay(index * 100 + 1000).duration(1000)}
+      style={[styles.container, rStyleContainer]}
     >
-      <CoffeeImg style={styles.image} />
+      <Animated.View style={inverseScale}>
+        <Animated.View style={[{ alignItems: 'center' }, rStyle]}>
+          <Animated.View
+            style={rImageStyle}
+            entering={ZoomIn.delay(1000).duration(1000)}
+          >
+            <CoffeeImg style={styles.image} />
+          </Animated.View>
 
-      <View style={styles.coffeeTypeTextContainer}>
-        <Text style={styles.coffeeTypeText}>{data.type}</Text>
-      </View>
+          <View style={styles.coffeeTypeTextContainer}>
+            <Text style={styles.coffeeTypeText}>{data.type}</Text>
+          </View>
 
-      <Text style={styles.coffeeName}>{data.name}</Text>
+          <Text style={styles.coffeeName}>{data.name}</Text>
 
-      <Text style={styles.description}>{data.description}</Text>
+          <Text style={styles.description}>{data.description}</Text>
 
-      <View style={styles.priceContainer}>
-        <Text style={styles.pricePrefix}>R$ </Text>
-        <Text style={styles.price}>{data.price}</Text>
-      </View>
+          <View style={styles.priceContainer}>
+            <Text style={styles.pricePrefix}>R$ </Text>
+            <Text style={styles.price}>{data.price}</Text>
+          </View>
+        </Animated.View>
+      </Animated.View>
     </Animated.View>
   )
 }
@@ -41,7 +104,7 @@ const styles = StyleSheet.create({
     height: 262,
     backgroundColor: theme.colors.gray_800,
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: 35,
     paddingHorizontal: 16,
     paddingBottom: 20,
     borderRadius: 6,
