@@ -28,7 +28,7 @@ export function Intro() {
         </View>
 
         <Text style={styles.title}>
-          Encontre o café perfeito para qualquer hora do dia
+          Encontre o café perfeito para {'\n'} qualquer hora do dia
         </Text>
 
         <View style={styles.inputContainer}>
