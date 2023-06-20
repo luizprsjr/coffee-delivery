@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
+import Animated, { SlideInRight } from 'react-native-reanimated'
 
 import { FeaturedCoffee } from '../data/featured-coffee'
 import { theme } from '../styles/theme'
@@ -12,7 +13,10 @@ export function FeaturedCoffeeCard({ index, data }: ListProps) {
   const CoffeeImg = data.svg
 
   return (
-    <View style={styles.container}>
+    <Animated.View
+      entering={SlideInRight.delay(index * 100 + 1000).duration(800)}
+      style={styles.container}
+    >
       <CoffeeImg style={styles.image} />
 
       <View style={styles.coffeeTypeTextContainer}>
@@ -27,7 +31,7 @@ export function FeaturedCoffeeCard({ index, data }: ListProps) {
         <Text style={styles.pricePrefix}>R$ </Text>
         <Text style={styles.price}>{data.price}</Text>
       </View>
-    </View>
+    </Animated.View>
   )
 }
 
