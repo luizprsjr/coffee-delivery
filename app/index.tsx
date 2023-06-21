@@ -6,6 +6,7 @@ import {
   View,
 } from 'react-native'
 import Animated, {
+  SlideInDown,
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated'
@@ -55,7 +56,10 @@ export default function Index() {
               bounces={false}
             />
 
-            <View style={{ paddingHorizontal: 32 }}>
+            <Animated.View
+              entering={SlideInDown.delay(1000).duration(1000)}
+              style={{ paddingHorizontal: 32 }}
+            >
               <Text
                 style={{
                   fontFamily: theme.fonts.title,
@@ -99,18 +103,26 @@ export default function Index() {
                   </TouchableOpacity>
                 ))}
               </View>
-            </View>
+            </Animated.View>
           </>
         }
         sections={coffeeList}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={{ marginVertical: 40, paddingHorizontal: 32 }}>
+          <Animated.View
+            entering={SlideInDown.delay(1000).duration(1000)}
+            style={{ marginVertical: 40, paddingHorizontal: 32 }}
+          >
             <Text>{item.name}</Text>
-          </View>
+          </Animated.View>
         )}
         renderSectionHeader={({ section: { title } }) => (
-          <Text style={{ color: 'red', paddingHorizontal: 32 }}>{title}</Text>
+          <Animated.Text
+            entering={SlideInDown.delay(1000).duration(1000)}
+            style={{ color: 'red', paddingHorizontal: 32 }}
+          >
+            {title}
+          </Animated.Text>
         )}
       />
     </View>
