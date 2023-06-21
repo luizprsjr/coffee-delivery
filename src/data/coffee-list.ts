@@ -1,3 +1,6 @@
+import React from 'react'
+import { SvgProps } from 'react-native-svg'
+
 import Americano from '../assets/americano.svg'
 import Arabe from '../assets/arabe.svg'
 import Gelado from '../assets/cafe-gelado.svg'
@@ -10,6 +13,19 @@ import Havaiano from '../assets/havaiano.svg'
 import Irlandes from '../assets/irlandes.svg'
 import Late from '../assets/latte.svg'
 import Mocaccino from '../assets/mochaccino.svg'
+
+export interface Coffee {
+  id: string
+  name: string
+  type: string
+  description: string
+  price: number
+  svg: React.FC<SvgProps>
+}
+
+export interface CoffeeTypes {
+  title: string
+}
 
 export const coffeeList = [
   {
