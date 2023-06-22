@@ -1,5 +1,7 @@
 import { MapPin, ShoppingCart } from 'phosphor-react-native'
+import { useRef } from 'react'
 import {
+  Platform,
   SectionList,
   StyleSheet,
   Text,
@@ -25,10 +27,11 @@ export default function Index() {
   const translateX = useSharedValue(0)
   const translateY = useSharedValue(0)
   const { top } = useSafeAreaInsets()
-
   const SectionListAnimated = Animated.createAnimatedComponent(
     SectionList<Coffee, CoffeeTypes>,
   )
+
+  const sectionListRef = useRef<SectionList<Coffee, CoffeeTypes>>()
 
   const scrollXHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -87,6 +90,7 @@ export default function Index() {
       </Animated.View>
 
       <SectionListAnimated
+        ref={sectionListRef}
         ListHeaderComponent={
           <>
             <Intro />
@@ -135,7 +139,7 @@ export default function Index() {
                   gap: 8,
                 }}
               >
-                {coffeeList.map((item) => (
+                {coffeeList.map((item, index) => (
                   <TouchableOpacity
                     key={item.title}
                     style={{
@@ -144,6 +148,14 @@ export default function Index() {
                       borderWidth: 1,
                       borderColor: theme.colors.purple,
                       borderRadius: 100,
+                    }}
+                    onPress={() => {
+                      sectionListRef.current.scrollToLocation({
+                        animated: true,
+                        itemIndex: Platform.OS === 'ios' ? 1 : 0,
+                        sectionIndex: index,
+                        viewOffset: top + 80,
+                      })
                     }}
                   >
                     <Text
