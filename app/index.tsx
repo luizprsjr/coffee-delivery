@@ -1,3 +1,4 @@
+import { MapPin, ShoppingCart } from 'phosphor-react-native'
 import {
   SectionList,
   StyleSheet,
@@ -6,10 +7,13 @@ import {
   View,
 } from 'react-native'
 import Animated, {
+  interpolateColor,
   SlideInDown,
   useAnimatedScrollHandler,
+  useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { FeaturedCoffeeCard } from '../src/components/featuredCoffeeCard'
 import { Intro } from '../src/components/intro'
@@ -19,19 +23,69 @@ import { theme } from '../src/styles/theme'
 
 export default function Index() {
   const translateX = useSharedValue(0)
-
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      translateX.value = event.contentOffset.x
-    },
-  })
+  const translateY = useSharedValue(0)
+  const { top } = useSafeAreaInsets()
 
   const SectionListAnimated = Animated.createAnimatedComponent(
     SectionList<Coffee, CoffeeTypes>,
   )
 
+  const scrollXHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      translateX.value = event.contentOffset.x
+    },
+  })
+  const scrollYHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      console.log(event.contentOffset.y)
+      translateY.value = event.contentOffset.y
+    },
+  })
+
+  const fixedHeaderStyles = useAnimatedStyle(() => {
+    return {
+      position: 'absolute',
+      paddingHorizontal: 32,
+      paddingVertical: 16,
+      backgroundColor: interpolateColor(
+        translateY.value,
+        [12.33, 484.33],
+        [theme.colors.gray_100, theme.colors.gray_900],
+      ),
+      width: '100%',
+      opacity: translateY.value >= 12.33 ? 1 : 0,
+      zIndex: translateY.value >= 12.33 ? 1 : -1,
+    }
+  })
+
+  const fixedHeaderTextStyles = useAnimatedStyle(() => {
+    return {
+      color: interpolateColor(
+        translateY.value,
+        [12.33, 484.33],
+        [theme.colors.gray_900, theme.colors.gray_200],
+      ),
+    }
+  })
+
   return (
     <View style={styles.container}>
+      <Animated.View style={fixedHeaderStyles}>
+        <View style={[styles.headerContainer, { marginTop: top }]}>
+          <View style={styles.locationContainer}>
+            <MapPin size={20} weight="fill" color={theme.colors.purple} />
+            <Animated.Text style={[styles.locationText, fixedHeaderTextStyles]}>
+              Barra do Piraí, RJ
+            </Animated.Text>
+          </View>
+          <ShoppingCart
+            size={20}
+            weight="fill"
+            color={theme.colors.dark_yellow}
+          />
+        </View>
+      </Animated.View>
+
       <SectionListAnimated
         ListHeaderComponent={
           <>
@@ -51,14 +105,16 @@ export default function Index() {
               showsHorizontalScrollIndicator={false}
               style={{ zIndex: 1, marginTop: -103 }}
               contentContainerStyle={{ gap: 32, paddingHorizontal: 32 }}
-              onScroll={scrollHandler}
+              onScroll={scrollXHandler}
               scrollEventThrottle={16}
               bounces={false}
             />
 
             <Animated.View
               entering={SlideInDown.delay(1000).duration(1000)}
-              style={{ paddingHorizontal: 32 }}
+              style={{
+                paddingHorizontal: 32,
+              }}
             >
               <Text
                 style={{
@@ -108,6 +164,9 @@ export default function Index() {
         }
         sections={coffeeList}
         keyExtractor={(item) => item.id}
+        onScroll={scrollYHandler}
+        scrollEventThrottle={16}
+        bounces={false}
         renderSectionHeader={({ section: { title } }) => (
           <Animated.Text
             entering={SlideInDown.delay(1000).duration(1000)}
@@ -210,5 +269,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.gray_900,
+  },
+
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  locationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  locationText: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 14,
+  },
+  fixedLocationText: {
+    color: theme.colors.gray_200,
+    fontFamily: theme.fonts.regular,
+    fontSize: 14,
   },
 })
