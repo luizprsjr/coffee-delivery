@@ -1,5 +1,5 @@
 import { MapPin, ShoppingCart } from 'phosphor-react-native'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import {
   Platform,
   SectionList,
@@ -23,15 +23,16 @@ import { Coffee, coffeeList, CoffeeTypes } from '../src/data/coffee-list'
 import { FeaturedCoffee } from '../src/data/featured-coffee'
 import { theme } from '../src/styles/theme'
 
+const SectionListAnimated = Animated.createAnimatedComponent(
+  SectionList<Coffee, CoffeeTypes>,
+)
+
 export default function Index() {
-  // const [currentSection, setcurrentSection] = useState('')
+  const [currentSection, setCurrentSection] = useState('')
 
   const translateX = useSharedValue(0)
   const translateY = useSharedValue(0)
   const { top } = useSafeAreaInsets()
-  const SectionListAnimated = Animated.createAnimatedComponent(
-    SectionList<Coffee, CoffeeTypes>,
-  )
 
   const sectionListRef = useRef<SectionList<Coffee, CoffeeTypes>>()
 
@@ -143,6 +144,10 @@ export default function Index() {
                 borderWidth: 1,
                 borderColor: theme.colors.purple,
                 borderRadius: 100,
+                backgroundColor:
+                  item.title === currentSection
+                    ? theme.colors.purple
+                    : 'transparent',
               }}
               onPress={() => {
                 sectionListRef.current.scrollToLocation({
@@ -151,13 +156,17 @@ export default function Index() {
                   sectionIndex: index,
                   viewOffset: top + 170,
                 })
+                setCurrentSection(item.title)
               }}
             >
               <Text
                 style={{
                   fontFamily: theme.fonts.bold,
                   fontSize: 10,
-                  color: theme.colors.purple,
+                  color:
+                    item.title === currentSection
+                      ? theme.colors.white
+                      : theme.colors.purple,
                   textTransform: 'uppercase',
                 }}
               >
@@ -227,6 +236,10 @@ export default function Index() {
                       borderWidth: 1,
                       borderColor: theme.colors.purple,
                       borderRadius: 100,
+                      backgroundColor:
+                        item.title === currentSection
+                          ? theme.colors.purple
+                          : 'transparent',
                     }}
                     onPress={() => {
                       sectionListRef.current.scrollToLocation({
@@ -235,13 +248,17 @@ export default function Index() {
                         sectionIndex: index,
                         viewOffset: top + 80,
                       })
+                      setCurrentSection(item.title)
                     }}
                   >
                     <Text
                       style={{
                         fontFamily: theme.fonts.bold,
                         fontSize: 10,
-                        color: theme.colors.purple,
+                        color:
+                          item.title === currentSection
+                            ? theme.colors.white
+                            : theme.colors.purple,
                         textTransform: 'uppercase',
                       }}
                     >
@@ -259,7 +276,6 @@ export default function Index() {
         scrollEventThrottle={16}
         bounces={false}
         renderSectionHeader={({ section: { title } }) => {
-          // setcurrentSection(title)
           return (
             <Animated.Text
               entering={SlideInDown.delay(1000).duration(1000)}
