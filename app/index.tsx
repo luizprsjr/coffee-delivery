@@ -29,6 +29,7 @@ const SectionListAnimated = Animated.createAnimatedComponent(
 
 export default function Index() {
   const [currentSection, setCurrentSection] = useState('')
+  const [isButtonChangeBlocked, setIsButtonChangeBlocked] = useState(false)
 
   const translateX = useSharedValue(0)
   const translateY = useSharedValue(0)
@@ -99,6 +100,20 @@ export default function Index() {
     }
   })
 
+  function handleSectionListScroll({ viewableItems }) {
+    if (!isButtonChangeBlocked) {
+      setCurrentSection(viewableItems[3]?.section.title)
+    }
+  }
+
+  function goToSectionHeader(title) {
+    setIsButtonChangeBlocked(true)
+    setCurrentSection(title)
+    setTimeout(() => {
+      setIsButtonChangeBlocked(false)
+    }, 500)
+  }
+
   return (
     <View style={styles.container}>
       <Animated.View style={fixedHeaderStyles}>
@@ -154,9 +169,9 @@ export default function Index() {
                   animated: true,
                   itemIndex: Platform.OS === 'ios' ? 1 : 0,
                   sectionIndex: index,
-                  viewOffset: top + 170,
+                  viewOffset: Platform.OS === 'android' ? top + 170 : top + 220,
                 })
-                setCurrentSection(item.title)
+                goToSectionHeader(item.title)
               }}
             >
               <Text
@@ -246,9 +261,10 @@ export default function Index() {
                         animated: true,
                         itemIndex: Platform.OS === 'ios' ? 1 : 0,
                         sectionIndex: index,
-                        viewOffset: top + 80,
+                        viewOffset:
+                          Platform.OS === 'android' ? top + 170 : top + 220,
                       })
-                      setCurrentSection(item.title)
+                      goToSectionHeader(item.title)
                     }}
                   >
                     <Text
@@ -273,8 +289,11 @@ export default function Index() {
         sections={coffeeList}
         keyExtractor={(item) => item.id}
         onScroll={scrollYHandler}
+        onViewableItemsChanged={handleSectionListScroll}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
+        removeClippedSubviews={Platform.OS === 'ios'}
+        stickySectionHeadersEnabled={false}
         bounces={false}
         renderSectionHeader={({ section: { title } }) => {
           return (
