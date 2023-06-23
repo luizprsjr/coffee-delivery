@@ -273,6 +273,7 @@ export default function Index() {
         sections={coffeeList}
         keyExtractor={(item) => item.id}
         onScroll={scrollYHandler}
+        showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
         bounces={false}
         renderSectionHeader={({ section: { title } }) => {
