@@ -24,6 +24,8 @@ import { FeaturedCoffee } from '../src/data/featured-coffee'
 import { theme } from '../src/styles/theme'
 
 export default function Index() {
+  // const [currentSection, setcurrentSection] = useState('')
+
   const translateX = useSharedValue(0)
   const translateY = useSharedValue(0)
   const { top } = useSafeAreaInsets()
@@ -40,7 +42,6 @@ export default function Index() {
   })
   const scrollYHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
-      console.log(event.contentOffset.y)
       translateY.value = event.contentOffset.y
     },
   })
@@ -50,6 +51,12 @@ export default function Index() {
       position: 'absolute',
       paddingHorizontal: 32,
       paddingVertical: 16,
+      borderBottomWidth: 1,
+      borderBottomColor: interpolateColor(
+        translateY.value,
+        [12.33, 484.33],
+        ['transparent', theme.colors.gray_800],
+      ),
       backgroundColor: interpolateColor(
         translateY.value,
         [12.33, 484.33],
@@ -58,6 +65,26 @@ export default function Index() {
       width: '100%',
       opacity: translateY.value >= 12.33 ? 1 : 0,
       zIndex: translateY.value >= 12.33 ? 1 : -1,
+    }
+  })
+
+  const fixedHeaderButtonsStyles = useAnimatedStyle(() => {
+    return {
+      position: 'absolute',
+      paddingHorizontal: 32,
+      paddingVertical: 16,
+      backgroundColor: theme.colors.gray_900,
+
+      borderBottomWidth: 1,
+      borderBottomColor: interpolateColor(
+        translateY.value,
+        [12.33, 484.33],
+        ['transparent', theme.colors.gray_800],
+      ),
+      width: '100%',
+      opacity: translateY.value >= 496 ? 1 : 0,
+      zIndex: translateY.value >= 496 ? 1 : -1,
+      top: Platform.OS === 'android' ? 90 : 112,
     }
   })
 
@@ -86,6 +113,58 @@ export default function Index() {
             weight="fill"
             color={theme.colors.dark_yellow}
           />
+        </View>
+      </Animated.View>
+
+      <Animated.View style={[fixedHeaderButtonsStyles, styles.shadow]}>
+        <Text
+          style={{
+            fontFamily: theme.fonts.title,
+            fontSize: 16,
+            color: theme.colors.gray_300,
+          }}
+        >
+          Nossos cafés
+        </Text>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 18,
+            gap: 8,
+          }}
+        >
+          {coffeeList.map((item, index) => (
+            <TouchableOpacity
+              key={item.title}
+              style={{
+                paddingVertical: 6,
+                paddingHorizontal: 12,
+                borderWidth: 1,
+                borderColor: theme.colors.purple,
+                borderRadius: 100,
+              }}
+              onPress={() => {
+                sectionListRef.current.scrollToLocation({
+                  animated: true,
+                  itemIndex: Platform.OS === 'ios' ? 1 : 0,
+                  sectionIndex: index,
+                  viewOffset: top + 170,
+                })
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: theme.fonts.bold,
+                  fontSize: 10,
+                  color: theme.colors.purple,
+                  textTransform: 'uppercase',
+                }}
+              >
+                {item.title}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </Animated.View>
 
@@ -179,20 +258,23 @@ export default function Index() {
         onScroll={scrollYHandler}
         scrollEventThrottle={16}
         bounces={false}
-        renderSectionHeader={({ section: { title } }) => (
-          <Animated.Text
-            entering={SlideInDown.delay(1000).duration(1000)}
-            style={{
-              fontFamily: theme.fonts.title,
-              fontSize: 14,
-              color: theme.colors.gray_400,
-              paddingHorizontal: 32,
-              marginBottom: 24,
-            }}
-          >
-            {title}
-          </Animated.Text>
-        )}
+        renderSectionHeader={({ section: { title } }) => {
+          // setcurrentSection(title)
+          return (
+            <Animated.Text
+              entering={SlideInDown.delay(1000).duration(1000)}
+              style={{
+                fontFamily: theme.fonts.title,
+                fontSize: 14,
+                color: theme.colors.gray_400,
+                paddingHorizontal: 32,
+                marginBottom: 24,
+              }}
+            >
+              {title}
+            </Animated.Text>
+          )
+        }}
         renderItem={({ item }) => {
           const CoffeeImg = item.svg
 
@@ -301,5 +383,12 @@ const styles = StyleSheet.create({
     color: theme.colors.gray_200,
     fontFamily: theme.fonts.regular,
     fontSize: 14,
+  },
+  shadow: {
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
   },
 })
