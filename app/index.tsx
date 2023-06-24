@@ -17,10 +17,9 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { FeaturedCoffeeCard } from '../src/components/featuredCoffeeCard'
+import { FeaturedCoffeeList } from '../src/components/featuredCoffeeList'
 import { Intro } from '../src/components/intro'
 import { Coffee, coffeeList, CoffeeTypes } from '../src/data/coffee-list'
-import { FeaturedCoffee } from '../src/data/featured-coffee'
 import { theme } from '../src/styles/theme'
 
 const SectionListAnimated = Animated.createAnimatedComponent(
@@ -31,17 +30,11 @@ export default function Index() {
   const [currentSection, setCurrentSection] = useState('')
   const [isButtonChangeBlocked, setIsButtonChangeBlocked] = useState(false)
 
-  const translateX = useSharedValue(0)
   const translateY = useSharedValue(0)
   const { top } = useSafeAreaInsets()
 
   const sectionListRef = useRef<SectionList<Coffee, CoffeeTypes>>()
 
-  const scrollXHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      translateX.value = event.contentOffset.x
-    },
-  })
   const scrollYHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       translateY.value = event.contentOffset.y
@@ -198,24 +191,7 @@ export default function Index() {
           <>
             <Intro />
 
-            <Animated.FlatList
-              data={FeaturedCoffee}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item, index }) => (
-                <FeaturedCoffeeCard
-                  index={index}
-                  data={item}
-                  translateX={translateX}
-                />
-              )}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              style={{ zIndex: 1, marginTop: -103 }}
-              contentContainerStyle={{ gap: 32, paddingHorizontal: 32 }}
-              onScroll={scrollXHandler}
-              scrollEventThrottle={16}
-              bounces={false}
-            />
+            <FeaturedCoffeeList />
 
             <Animated.View
               entering={SlideInDown.delay(1000).duration(1000)}

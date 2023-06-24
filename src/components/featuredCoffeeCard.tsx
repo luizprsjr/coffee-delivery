@@ -6,16 +6,16 @@ import Animated, {
   ZoomIn,
 } from 'react-native-reanimated'
 
-import { FeaturedCoffee } from '../data/featured-coffee'
+import { featuredCoffee } from '../data/featured-coffee'
 import { theme } from '../styles/theme'
 
-type ListProps = {
+type CardProps = {
   index: number
-  data: (typeof FeaturedCoffee)[0]
+  data: (typeof featuredCoffee)[0]
   translateX: Animated.SharedValue<number>
 }
 
-export function FeaturedCoffeeCard({ index, data, translateX }: ListProps) {
+export function FeaturedCoffeeCard({ index, data, translateX }: CardProps) {
   const CoffeeImg = data.svg
 
   const rStyleContainer = useAnimatedStyle(() => {

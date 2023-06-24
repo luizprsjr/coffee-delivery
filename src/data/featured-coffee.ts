@@ -2,7 +2,7 @@ import Irlandes from '../assets/irlandes.svg'
 import Late from '../assets/latte.svg'
 import Mocaccino from '../assets/mochaccino.svg'
 
-export const FeaturedCoffee = [
+export const featuredCoffee = [
   {
     id: '1',
     name: 'Latte',
