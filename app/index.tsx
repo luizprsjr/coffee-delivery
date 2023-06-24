@@ -99,7 +99,13 @@ export default function Index() {
     }
   }
 
-  function goToSectionHeader(title) {
+  function goToSectionHeader(title, index) {
+    sectionListRef.current.scrollToLocation({
+      animated: true,
+      itemIndex: Platform.OS === 'ios' ? 1 : 0,
+      sectionIndex: index,
+      viewOffset: Platform.OS === 'android' ? top + 170 : top + 220,
+    })
     setIsButtonChangeBlocked(true)
     setCurrentSection(title)
     setTimeout(() => {
@@ -110,7 +116,7 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <Animated.View style={fixedHeaderStyles}>
-        <View style={[styles.headerContainer, { marginTop: top }]}>
+        <View style={[styles.fixedHeaderContainer, { marginTop: top }]}>
           <View style={styles.locationContainer}>
             <MapPin size={20} weight="fill" color={theme.colors.purple} />
             <Animated.Text style={[styles.locationText, fixedHeaderTextStyles]}>
@@ -126,57 +132,36 @@ export default function Index() {
       </Animated.View>
 
       <Animated.View style={[fixedHeaderButtonsStyles, styles.shadow]}>
-        <Text
-          style={{
-            fontFamily: theme.fonts.title,
-            fontSize: 16,
-            color: theme.colors.gray_300,
-          }}
-        >
-          Nossos cafés
-        </Text>
+        <Text style={styles.fixedFilterButtonsTitle}>Nossos cafés</Text>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 18,
-            gap: 8,
-          }}
-        >
+        <View style={styles.fixedFilterButtonsContainer}>
           {coffeeList.map((item, index) => (
             <TouchableOpacity
               key={item.title}
-              style={{
-                paddingVertical: 6,
-                paddingHorizontal: 12,
-                borderWidth: 1,
-                borderColor: theme.colors.purple,
-                borderRadius: 100,
-                backgroundColor:
-                  item.title === currentSection
-                    ? theme.colors.purple
-                    : 'transparent',
-              }}
+              style={[
+                styles.filterButton,
+                {
+                  backgroundColor:
+                    item.title === currentSection
+                      ? theme.colors.purple
+                      : 'transparent',
+                },
+              ]}
               onPress={() => {
-                sectionListRef.current.scrollToLocation({
-                  animated: true,
-                  itemIndex: Platform.OS === 'ios' ? 1 : 0,
-                  sectionIndex: index,
-                  viewOffset: Platform.OS === 'android' ? top + 170 : top + 220,
-                })
-                goToSectionHeader(item.title)
+                goToSectionHeader(item.title, index)
               }}
             >
               <Text
-                style={{
-                  fontFamily: theme.fonts.bold,
-                  fontSize: 10,
-                  color:
-                    item.title === currentSection
-                      ? theme.colors.white
-                      : theme.colors.purple,
-                  textTransform: 'uppercase',
-                }}
+                style={[
+                  styles.buttonTitle,
+                  {
+                    color:
+                      item.title === currentSection
+                        ? theme.colors.white
+                        : theme.colors.purple,
+                    textTransform: 'uppercase',
+                  },
+                ]}
               >
                 {item.title}
               </Text>
@@ -195,64 +180,38 @@ export default function Index() {
 
             <Animated.View
               entering={SlideInDown.delay(1000).duration(1000)}
-              style={{
-                paddingHorizontal: 32,
-              }}
+              style={{ paddingHorizontal: 32 }}
             >
-              <Text
-                style={{
-                  fontFamily: theme.fonts.title,
-                  fontSize: 16,
-                  color: theme.colors.gray_300,
-                  marginTop: 30,
-                }}
-              >
-                Nossos cafés
-              </Text>
+              <Text style={styles.filterButtonsTitle}>Nossos cafés</Text>
 
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginTop: 18,
-                  marginBottom: 32,
-                  gap: 8,
-                }}
-              >
+              <View style={styles.filterButtonsContainer}>
                 {coffeeList.map((item, index) => (
                   <TouchableOpacity
                     key={item.title}
-                    style={{
-                      paddingVertical: 6,
-                      paddingHorizontal: 12,
-                      borderWidth: 1,
-                      borderColor: theme.colors.purple,
-                      borderRadius: 100,
-                      backgroundColor:
-                        item.title === currentSection
-                          ? theme.colors.purple
-                          : 'transparent',
-                    }}
+                    style={[
+                      styles.filterButton,
+                      {
+                        backgroundColor:
+                          item.title === currentSection
+                            ? theme.colors.purple
+                            : 'transparent',
+                      },
+                    ]}
                     onPress={() => {
-                      sectionListRef.current.scrollToLocation({
-                        animated: true,
-                        itemIndex: Platform.OS === 'ios' ? 1 : 0,
-                        sectionIndex: index,
-                        viewOffset:
-                          Platform.OS === 'android' ? top + 170 : top + 220,
-                      })
-                      goToSectionHeader(item.title)
+                      goToSectionHeader(item.title, index)
                     }}
                   >
                     <Text
-                      style={{
-                        fontFamily: theme.fonts.bold,
-                        fontSize: 10,
-                        color:
-                          item.title === currentSection
-                            ? theme.colors.white
-                            : theme.colors.purple,
-                        textTransform: 'uppercase',
-                      }}
+                      style={[
+                        styles.buttonTitle,
+                        {
+                          color:
+                            item.title === currentSection
+                              ? theme.colors.white
+                              : theme.colors.purple,
+                          textTransform: 'uppercase',
+                        },
+                      ]}
                     >
                       {item.title}
                     </Text>
@@ -275,13 +234,7 @@ export default function Index() {
           return (
             <Animated.Text
               entering={SlideInDown.delay(1000).duration(1000)}
-              style={{
-                fontFamily: theme.fonts.title,
-                fontSize: 14,
-                color: theme.colors.gray_400,
-                paddingHorizontal: 32,
-                marginBottom: 24,
-              }}
+              style={styles.sectionHeader}
             >
               {title}
             </Animated.Text>
@@ -377,11 +330,10 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.gray_900,
   },
 
-  headerContainer: {
+  fixedHeaderContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -391,16 +343,54 @@ const styles = StyleSheet.create({
     fontFamily: theme.fonts.regular,
     fontSize: 14,
   },
-  fixedLocationText: {
-    color: theme.colors.gray_200,
-    fontFamily: theme.fonts.regular,
-    fontSize: 14,
-  },
+
   shadow: {
     elevation: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
+  },
+  fixedFilterButtonsTitle: {
+    fontFamily: theme.fonts.title,
+    fontSize: 16,
+    color: theme.colors.gray_300,
+  },
+  fixedFilterButtonsContainer: {
+    flexDirection: 'row',
+    marginTop: 18,
+    gap: 8,
+  },
+  filterButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: theme.colors.purple,
+    borderRadius: 100,
+  },
+  buttonTitle: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 10,
+  },
+
+  filterButtonsTitle: {
+    fontFamily: theme.fonts.title,
+    fontSize: 16,
+    color: theme.colors.gray_300,
+    marginTop: 30,
+  },
+  filterButtonsContainer: {
+    flexDirection: 'row',
+    marginTop: 18,
+    gap: 8,
+    marginBottom: 32,
+  },
+
+  sectionHeader: {
+    fontFamily: theme.fonts.title,
+    fontSize: 14,
+    color: theme.colors.gray_400,
+    paddingHorizontal: 32,
+    marginBottom: 24,
   },
 })
