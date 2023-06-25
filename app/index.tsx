@@ -1,13 +1,6 @@
 import { MapPin, ShoppingCart } from 'phosphor-react-native'
 import { useRef, useState } from 'react'
-import {
-  Platform,
-  SectionList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { Platform, SectionList, StyleSheet, View } from 'react-native'
 import Animated, {
   interpolateColor,
   SlideInDown,
@@ -19,6 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { CoffeeCard } from '../src/components/coffeeCard'
 import { FeaturedCoffeeList } from '../src/components/featuredCoffeeList'
+import { Filter } from '../src/components/filter'
 import { Intro } from '../src/components/intro'
 import { Coffee, coffeeList, CoffeeTypes } from '../src/data/coffee-list'
 import { theme } from '../src/styles/theme'
@@ -100,7 +94,7 @@ export default function Index() {
     }
   }
 
-  function goToSectionHeader(title, index) {
+  function goToSectionHeader(title: string, index: number) {
     sectionListRef.current.scrollToLocation({
       animated: true,
       itemIndex: Platform.OS === 'ios' ? 1 : 0,
@@ -133,42 +127,10 @@ export default function Index() {
       </Animated.View>
 
       <Animated.View style={[fixedHeaderButtonsStyles, styles.shadow]}>
-        <Text style={styles.fixedFilterButtonsTitle}>Nossos cafés</Text>
-
-        <View style={styles.fixedFilterButtonsContainer}>
-          {coffeeList.map((item, index) => (
-            <TouchableOpacity
-              key={item.title}
-              style={[
-                styles.filterButton,
-                {
-                  backgroundColor:
-                    item.title === currentSection
-                      ? theme.colors.purple
-                      : 'transparent',
-                },
-              ]}
-              onPress={() => {
-                goToSectionHeader(item.title, index)
-              }}
-            >
-              <Text
-                style={[
-                  styles.buttonTitle,
-                  {
-                    color:
-                      item.title === currentSection
-                        ? theme.colors.white
-                        : theme.colors.purple,
-                    textTransform: 'uppercase',
-                  },
-                ]}
-              >
-                {item.title}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        <Filter
+          currentSection={currentSection}
+          goToSectionHeader={goToSectionHeader}
+        />
       </Animated.View>
 
       <SectionListAnimated
@@ -181,44 +143,12 @@ export default function Index() {
 
             <Animated.View
               entering={SlideInDown.delay(1000).duration(1000)}
-              style={{ paddingHorizontal: 32 }}
+              style={styles.filterHeaderButtonsContainer}
             >
-              <Text style={styles.filterButtonsTitle}>Nossos cafés</Text>
-
-              <View style={styles.filterButtonsContainer}>
-                {coffeeList.map((item, index) => (
-                  <TouchableOpacity
-                    key={item.title}
-                    style={[
-                      styles.filterButton,
-                      {
-                        backgroundColor:
-                          item.title === currentSection
-                            ? theme.colors.purple
-                            : 'transparent',
-                      },
-                    ]}
-                    onPress={() => {
-                      goToSectionHeader(item.title, index)
-                    }}
-                  >
-                    <Text
-                      style={[
-                        styles.buttonTitle,
-                        {
-                          color:
-                            item.title === currentSection
-                              ? theme.colors.white
-                              : theme.colors.purple,
-                          textTransform: 'uppercase',
-                        },
-                      ]}
-                    >
-                      {item.title}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
+              <Filter
+                currentSection={currentSection}
+                goToSectionHeader={goToSectionHeader}
+              />
             </Animated.View>
           </>
         }
@@ -274,12 +204,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 4,
   },
-  fixedFilterButtonsTitle: {
+
+  filterHeaderButtonsContainer: {
+    paddingHorizontal: 32,
+    paddingTop: 30,
+    marginBottom: 32,
+  },
+
+  filterButtonsTitle: {
     fontFamily: theme.fonts.title,
     fontSize: 16,
     color: theme.colors.gray_300,
   },
-  fixedFilterButtonsContainer: {
+  filterButtonsContainer: {
     flexDirection: 'row',
     marginTop: 18,
     gap: 8,
@@ -294,19 +231,6 @@ const styles = StyleSheet.create({
   buttonTitle: {
     fontFamily: theme.fonts.bold,
     fontSize: 10,
-  },
-
-  filterButtonsTitle: {
-    fontFamily: theme.fonts.title,
-    fontSize: 16,
-    color: theme.colors.gray_300,
-    marginTop: 30,
-  },
-  filterButtonsContainer: {
-    flexDirection: 'row',
-    marginTop: 18,
-    gap: 8,
-    marginBottom: 32,
   },
 
   sectionHeader: {
