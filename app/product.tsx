@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ArrowLeft, ShoppingCart } from 'phosphor-react-native'
 import { StyleSheet, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -10,6 +10,7 @@ import { SizeButton } from '../src/components/sizeButton'
 import { theme } from '../src/styles/theme'
 
 export default function Product() {
+  const router = useRouter()
   const { name, type, price, description } = useLocalSearchParams()
   const { top } = useSafeAreaInsets()
 
@@ -17,7 +18,7 @@ export default function Product() {
     <View style={styles.container}>
       <View style={[styles.darkArea, { paddingTop: top }]}>
         <View style={styles.header}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/')}>
             <ArrowLeft size={24} color={theme.colors.white} />
           </TouchableOpacity>
 
