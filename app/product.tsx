@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import Coffee from '../src/assets/coffee.svg'
 import Smoke from '../src/assets/smoke.svg'
+import { SizeButton } from '../src/components/sizeButton'
 import { theme } from '../src/styles/theme'
 
 export default function Product() {
@@ -26,7 +27,9 @@ export default function Product() {
         <View style={styles.nameAndPriceContainer}>
           <View>
             <Text style={styles.type}>{type}</Text>
-            <Text style={styles.name}>{name}</Text>
+            <Text style={styles.name} numberOfLines={2}>
+              {name}
+            </Text>
           </View>
 
           <View style={[styles.priceContainer]}>
@@ -44,8 +47,20 @@ export default function Product() {
         </View>
       </View>
 
-      <View style={{ paddingVertical: 42, paddingHorizontal: 32 }}>
-        <Text>Selecione o tamanho:</Text>
+      <View style={styles.selectCoffeeContainer}>
+        <Text style={styles.selectTitle}>Selecione o tamanho: </Text>
+
+        <View style={styles.buttonsContainer}>
+          <SizeButton size={114} />
+          <SizeButton size={140} />
+          <SizeButton size={227} />
+        </View>
+
+        <View style={styles.addButtonContainer}>
+          <TouchableOpacity style={styles.addButton}>
+            <Text style={styles.addButtonText}>ADICIONAR</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   )
@@ -72,6 +87,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 12,
+    gap: 8,
   },
   type: {
     fontFamily: theme.fonts.bold,
@@ -89,6 +105,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: theme.colors.white,
     marginTop: 12,
+    maxWidth: 225,
   },
 
   priceContainer: {
@@ -128,5 +145,44 @@ const styles = StyleSheet.create({
   },
   coffee: {
     alignSelf: 'center',
+  },
+
+  selectCoffeeContainer: {
+    paddingVertical: 42,
+    paddingHorizontal: 32,
+  },
+  selectTitle: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 14,
+    color: theme.colors.gray_400,
+  },
+
+  buttonsContainer: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 8,
+  },
+
+  addButtonContainer: {
+    marginTop: 20,
+    padding: 8,
+    borderRadius: 6,
+    backgroundColor: theme.colors.gray_700,
+  },
+  addButton: {
+    padding: 8,
+    borderRadius: 6,
+    backgroundColor: theme.colors.dark_purple,
+    paddingHorizontal: 8,
+    paddingVertical: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  addButtonText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 14,
+    lineHeight: 22.4,
+    color: theme.colors.white,
+    textTransform: 'uppercase',
   },
 })
