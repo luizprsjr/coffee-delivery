@@ -4,6 +4,8 @@ import { StyleSheet, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
+import Coffee from '../src/assets/coffee.svg'
+import Smoke from '../src/assets/smoke.svg'
 import { theme } from '../src/styles/theme'
 
 export default function Product() {
@@ -21,12 +23,7 @@ export default function Product() {
           <ShoppingCart size={20} weight="fill" color={theme.colors.purple} />
         </View>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
+        <View style={styles.nameAndPriceContainer}>
           <View>
             <Text style={styles.type}>{type}</Text>
             <Text style={styles.name}>{name}</Text>
@@ -40,6 +37,15 @@ export default function Product() {
         </View>
 
         <Text style={styles.description}>{description}</Text>
+
+        <View style={styles.coffeeImageContainer}>
+          <Smoke style={styles.smoke} />
+          <Coffee style={styles.coffee} />
+        </View>
+      </View>
+
+      <View style={{ paddingVertical: 42, paddingHorizontal: 32 }}>
+        <Text>Selecione o tamanho:</Text>
       </View>
     </View>
   )
@@ -51,8 +57,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.gray_900,
   },
   darkArea: {
+    flex: 1,
     paddingHorizontal: 32,
-    height: 400,
     backgroundColor: theme.colors.gray_100,
   },
   header: {
@@ -60,6 +66,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 26,
+  },
+
+  nameAndPriceContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 12,
   },
   type: {
     fontFamily: theme.fonts.bold,
@@ -99,5 +111,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.gray_500,
     marginTop: 20,
+  },
+
+  coffeeImageContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    marginTop: 32,
+    marginBottom: -74,
+  },
+  smoke: {
+    alignSelf: 'center',
+    marginBottom: -62,
+    zIndex: 1,
+  },
+  coffee: {
+    alignSelf: 'center',
   },
 })
