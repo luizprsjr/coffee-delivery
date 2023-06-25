@@ -48,23 +48,13 @@ export function FilterButton({
     }
   })
 
-  function onPressIn() {
-    scale.value = withTiming(1.1)
-  }
-
-  function onPressOut() {
-    scale.value = withTiming(1)
-  }
-
   useEffect(() => {
-    checked.value = withTiming(isChecked ? 1 : 0)
+    checked.value = withTiming(isChecked ? 1 : 0, { duration: 1000 })
   }, [isChecked, checked])
 
   return (
     <PressableAnimated
       key={item.title}
-      onPressIn={onPressIn}
-      onPressOut={onPressOut}
       style={[styles.filterButton, animatedButtonContainerStyle]}
       onPress={() => {
         goToSectionHeader(item.title, index)
