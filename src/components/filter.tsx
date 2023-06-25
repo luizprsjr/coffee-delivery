@@ -1,8 +1,9 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 import { coffeeList } from '../data/coffee-list'
 import { theme } from '../styles/theme'
+import { FilterButton } from './filterButton'
 
 interface FilterProps {
   currentSection: string
@@ -16,36 +17,13 @@ export function Filter({ currentSection, goToSectionHeader }: FilterProps) {
 
       <View style={styles.filterButtonsContainer}>
         {coffeeList.map((item, index) => (
-          <TouchableOpacity
+          <FilterButton
             key={item.title}
-            style={[
-              styles.filterButton,
-              {
-                backgroundColor:
-                  item.title === currentSection
-                    ? theme.colors.purple
-                    : 'transparent',
-              },
-            ]}
-            onPress={() => {
-              goToSectionHeader(item.title, index)
-            }}
-          >
-            <Text
-              style={[
-                styles.buttonTitle,
-                {
-                  color:
-                    item.title === currentSection
-                      ? theme.colors.white
-                      : theme.colors.purple,
-                  textTransform: 'uppercase',
-                },
-              ]}
-            >
-              {item.title}
-            </Text>
-          </TouchableOpacity>
+            item={item}
+            index={index}
+            goToSectionHeader={goToSectionHeader}
+            isChecked={item.title === currentSection}
+          />
         ))}
       </View>
     </>
@@ -62,16 +40,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 18,
     gap: 8,
-  },
-  filterButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderWidth: 1,
-    borderColor: theme.colors.purple,
-    borderRadius: 100,
-  },
-  buttonTitle: {
-    fontFamily: theme.fonts.bold,
-    fontSize: 10,
   },
 })
