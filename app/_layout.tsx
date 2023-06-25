@@ -27,6 +27,7 @@ export default function Layout() {
       >
         <Stack.Screen name="index" redirect={!hasLoadedFonts} />
         <Stack.Screen name="splash" />
+        <Stack.Screen name="product" />
       </Stack>
     </>
   )
