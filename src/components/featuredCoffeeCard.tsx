@@ -89,8 +89,9 @@ export function FeaturedCoffeeCard({ index, data, translateX }: CardProps) {
           <Text style={styles.description}>{data.description}</Text>
 
           <View style={styles.priceContainer}>
-            <Text style={styles.pricePrefix}>R$ </Text>
-            <Text style={styles.price}>{data.price}</Text>
+            <Text style={styles.pricePrefix}>
+              R$ <Text style={styles.price}>{data.price}</Text>
+            </Text>
           </View>
         </Animated.View>
       </Animated.View>

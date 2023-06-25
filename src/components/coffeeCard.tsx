@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { useRouter } from 'expo-router'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Animated, { SlideInDown } from 'react-native-reanimated'
 
 import { Coffee } from '../data/coffee-list'
@@ -8,24 +9,35 @@ type CardProps = {
   item: Coffee
 }
 
+const TouchableOpacityAnimated =
+  Animated.createAnimatedComponent(TouchableOpacity)
+
 export function CoffeeCard({ item }: CardProps) {
   const CoffeeImg = item.svg
+  const router = useRouter()
 
   return (
-    <Animated.View
+    <TouchableOpacityAnimated
       entering={SlideInDown.delay(1000).duration(1000)}
       style={styles.container}
+      onPress={() =>
+        router.push({
+          pathname: '/product',
+          params: item,
+        })
+      }
     >
       <CoffeeImg style={{ marginTop: -32, marginLeft: -8 }} />
       <View style={{ flex: 1, width: '100%' }}>
         <Text style={styles.cardTitle}>{item.name}</Text>
         <Text style={styles.cardDescription}>{item.description}</Text>
         <View style={styles.priceContainer}>
-          <Text style={styles.price$}>R$ </Text>
-          <Text style={styles.price}>{item.price}</Text>
+          <Text style={styles.price$}>
+            R$ <Text style={styles.price}>{item.price}</Text>
+          </Text>
         </View>
       </View>
-    </Animated.View>
+    </TouchableOpacityAnimated>
   )
 }
 
