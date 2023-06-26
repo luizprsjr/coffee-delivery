@@ -1,8 +1,10 @@
+import { StatusBar, StatusBarStyle } from 'expo-status-bar'
 import { MapPin, ShoppingCart } from 'phosphor-react-native'
 import { useRef, useState } from 'react'
 import { Platform, SectionList, StyleSheet, View } from 'react-native'
 import Animated, {
   interpolateColor,
+  runOnJS,
   SlideInDown,
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -24,6 +26,7 @@ const SectionListAnimated = Animated.createAnimatedComponent(
 export default function Index() {
   const [currentSection, setCurrentSection] = useState('')
   const [isButtonChangeBlocked, setIsButtonChangeBlocked] = useState(false)
+  const [statusBarColor, setStatusBarColor] = useState<StatusBarStyle>('light')
 
   const translateY = useSharedValue(0)
   const { top } = useSafeAreaInsets()
@@ -33,6 +36,11 @@ export default function Index() {
   const scrollYHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       translateY.value = event.contentOffset.y
+      if (event.contentOffset.y > 275) {
+        runOnJS(setStatusBarColor)('dark')
+      } else {
+        runOnJS(setStatusBarColor)('light')
+      }
     },
   })
 
@@ -110,6 +118,7 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
+      <StatusBar style={statusBarColor} translucent />
       <Animated.View style={fixedHeaderStyles}>
         <View style={[styles.fixedHeaderContainer, { marginTop: top }]}>
           <View style={styles.locationContainer}>
