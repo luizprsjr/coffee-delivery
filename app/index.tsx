@@ -167,7 +167,6 @@ export default function Index() {
         onViewableItemsChanged={handleSectionListScroll}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
-        removeClippedSubviews={Platform.OS === 'ios'}
         stickySectionHeadersEnabled={false}
         bounces={false}
         renderSectionHeader={({ section: { title } }) => {
