@@ -1,18 +1,52 @@
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { ArrowLeft, ShoppingCart } from 'phosphor-react-native'
-import { StyleSheet, Text, View } from 'react-native'
+import { ArrowLeft, Minus, Plus, ShoppingCart } from 'phosphor-react-native'
+import { useState } from 'react'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useDispatch } from 'react-redux'
 
 import Coffee from '../src/assets/coffee.svg'
 import Smoke from '../src/assets/smoke.svg'
 import { SizeButton } from '../src/components/sizeButton'
+import { addItem } from '../src/store/cart'
 import { theme } from '../src/styles/theme'
 
 export default function Product() {
+  const [size, setSize] = useState(null)
+  const [quantity, setQuantity] = useState(1)
+
+  const dispatch = useDispatch()
   const router = useRouter()
-  const { name, type, price, description } = useLocalSearchParams()
+  const { id, name, type, price, description } = useLocalSearchParams()
   const { top } = useSafeAreaInsets()
+
+  function handleAddItem() {
+    if (!size) return Alert.alert('selecione o tamanho')
+
+    if (typeof id === 'string') {
+      dispatch(
+        addItem({
+          id,
+          quantity,
+          size,
+        }),
+      )
+      router.push('cart')
+    }
+  }
+
+  function changeCoffeeSize(size: number) {
+    setSize(size)
+  }
+
+  function handleIncreaseQuantity() {
+    setQuantity((prev) => prev + 1)
+  }
+
+  function handleDecreaseQuantity() {
+    setQuantity((prev) => prev - 1)
+  }
 
   return (
     <View style={styles.container}>
@@ -27,7 +61,9 @@ export default function Product() {
 
         <View style={styles.nameAndPriceContainer}>
           <View>
-            <Text style={styles.type}>{type}</Text>
+            <View style={styles.typeContainer}>
+              <Text style={styles.type}>{type}</Text>
+            </View>
             <Text style={styles.name} numberOfLines={2}>
               {name}
             </Text>
@@ -52,15 +88,41 @@ export default function Product() {
         <Text style={styles.selectTitle}>Selecione o tamanho: </Text>
 
         <View style={styles.buttonsContainer}>
-          <SizeButton size={114} />
-          <SizeButton size={140} />
-          <SizeButton size={227} />
+          <SizeButton
+            size={114}
+            isChecked={size === 114}
+            changeSize={changeCoffeeSize}
+          />
+          <SizeButton
+            size={140}
+            isChecked={size === 140}
+            changeSize={changeCoffeeSize}
+          />
+          <SizeButton
+            size={227}
+            isChecked={size === 227}
+            changeSize={changeCoffeeSize}
+          />
         </View>
 
         <View style={styles.addButtonContainer}>
-          <TouchableOpacity style={styles.addButton}>
-            <Text style={styles.addButtonText}>ADICIONAR</Text>
-          </TouchableOpacity>
+          <View style={styles.quantityContainer}>
+            <TouchableOpacity onPress={handleDecreaseQuantity}>
+              <Minus size={20} color={theme.colors.purple} />
+            </TouchableOpacity>
+
+            <Text style={styles.quantityText}>{quantity}</Text>
+
+            <TouchableOpacity onPress={handleIncreaseQuantity}>
+              <Plus size={20} color={theme.colors.purple} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity style={styles.addButton} onPress={handleAddItem}>
+              <Text style={styles.addButtonText}>ADICIONAR</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
@@ -90,6 +152,12 @@ const styles = StyleSheet.create({
     marginTop: 12,
     gap: 8,
   },
+
+  typeContainer: {
+    borderRadius: 100,
+    overflow: 'hidden',
+    alignSelf: 'flex-start',
+  },
   type: {
     fontFamily: theme.fonts.bold,
     fontSize: 10,
@@ -99,7 +167,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 12,
     backgroundColor: theme.colors.gray_200,
-    borderRadius: 100,
   },
   name: {
     fontFamily: theme.fonts.title,
@@ -164,7 +231,23 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
 
+  quantityContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
+    padding: 8,
+  },
+  quantityText: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 16,
+    color: theme.colors.gray_100,
+  },
+
   addButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 16,
     marginTop: 20,
     padding: 8,
     borderRadius: 6,
