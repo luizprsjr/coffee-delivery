@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { Provider } from 'react-redux'
 
 import { Baloo2_700Bold } from '@expo-google-fonts/baloo-2'
 import {
@@ -7,6 +8,8 @@ import {
   Roboto_700Bold,
   useFonts,
 } from '@expo-google-fonts/roboto'
+
+import { store } from '../src/store'
 
 export default function Layout() {
   const [hasLoadedFonts] = useFonts({
@@ -18,17 +21,21 @@ export default function Layout() {
   return (
     <>
       <StatusBar style="light" translucent />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: 'transparent' },
-          animation: 'fade',
-        }}
-      >
-        <Stack.Screen name="index" redirect={!hasLoadedFonts} />
-        <Stack.Screen name="splash" />
-        <Stack.Screen name="product" />
-      </Stack>
+
+      <Provider store={store}>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: 'transparent' },
+            animation: 'fade',
+          }}
+        >
+          <Stack.Screen name="index" redirect={!hasLoadedFonts} />
+          <Stack.Screen name="splash" />
+          <Stack.Screen name="product" />
+          <Stack.Screen name="cart" />
+        </Stack>
+      </Provider>
     </>
   )
 }
