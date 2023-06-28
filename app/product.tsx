@@ -1,20 +1,24 @@
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ArrowLeft, Minus, Plus, ShoppingCart } from 'phosphor-react-native'
 import { useState } from 'react'
-import { Alert, StyleSheet, Text, View } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Coffee from '../src/assets/coffee.svg'
 import Smoke from '../src/assets/smoke.svg'
 import { SizeButton } from '../src/components/sizeButton'
+import { RootState } from '../src/store'
 import { addItem } from '../src/store/cart'
 import { theme } from '../src/styles/theme'
 
 export default function Product() {
   const [size, setSize] = useState(null)
   const [quantity, setQuantity] = useState(1)
+
+  const shoppingCart = useSelector(
+    (state: RootState) => state.shoppingCart.items,
+  )
 
   const dispatch = useDispatch()
   const router = useRouter()
@@ -56,7 +60,17 @@ export default function Product() {
             <ArrowLeft size={24} color={theme.colors.white} />
           </TouchableOpacity>
 
-          <ShoppingCart size={20} weight="fill" color={theme.colors.purple} />
+          <TouchableOpacity
+            hitSlop={{ top: 20, left: 20, right: 20, bottom: 20 }}
+            onPress={() => router.push('cart')}
+          >
+            {shoppingCart.length > 0 && (
+              <View style={styles.cartCountContainer}>
+                <Text style={styles.cartCountText}>{shoppingCart.length}</Text>
+              </View>
+            )}
+            <ShoppingCart size={20} weight="fill" color={theme.colors.purple} />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.nameAndPriceContainer}>
@@ -144,6 +158,23 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 26,
+  },
+
+  cartCountContainer: {
+    position: 'absolute',
+    width: 20,
+    height: 20,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.colors.purple,
+    top: -16,
+    right: -16,
+  },
+  cartCountText: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 12,
+    color: theme.colors.white,
   },
 
   nameAndPriceContainer: {

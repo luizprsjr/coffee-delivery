@@ -1,7 +1,15 @@
+import { useRouter } from 'expo-router'
 import { StatusBar, StatusBarStyle } from 'expo-status-bar'
 import { MapPin, ShoppingCart } from 'phosphor-react-native'
 import { useRef, useState } from 'react'
-import { Platform, SectionList, StyleSheet, View } from 'react-native'
+import {
+  Platform,
+  SectionList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import Animated, {
   interpolateColor,
   runOnJS,
@@ -11,12 +19,14 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useSelector } from 'react-redux'
 
 import { CoffeeCard } from '../src/components/coffeeCard'
 import { FeaturedCoffeeList } from '../src/components/featuredCoffeeList'
 import { Filter } from '../src/components/filter'
 import { Intro } from '../src/components/intro'
 import { Coffee, coffeeList, CoffeeTypes } from '../src/data/coffee-list'
+import { RootState } from '../src/store'
 import { theme } from '../src/styles/theme'
 
 const SectionListAnimated = Animated.createAnimatedComponent(
@@ -28,10 +38,15 @@ export default function Index() {
   const [isButtonChangeBlocked, setIsButtonChangeBlocked] = useState(false)
   const [statusBarColor, setStatusBarColor] = useState<StatusBarStyle>('light')
 
+  const router = useRouter()
   const translateY = useSharedValue(0)
   const { top } = useSafeAreaInsets()
 
   const sectionListRef = useRef<SectionList<Coffee, CoffeeTypes>>()
+
+  const shoppingCart = useSelector(
+    (state: RootState) => state.shoppingCart.items,
+  )
 
   const scrollYHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -127,11 +142,21 @@ export default function Index() {
               Barra do Piraí, RJ
             </Animated.Text>
           </View>
-          <ShoppingCart
-            size={20}
-            weight="fill"
-            color={theme.colors.dark_yellow}
-          />
+          <TouchableOpacity
+            hitSlop={{ top: 20, left: 20, right: 20, bottom: 20 }}
+            onPress={() => router.push('cart')}
+          >
+            {shoppingCart.length > 0 && (
+              <View style={styles.cartCountContainer}>
+                <Text style={styles.cartCountText}>{shoppingCart.length}</Text>
+              </View>
+            )}
+            <ShoppingCart
+              size={20}
+              weight="fill"
+              color={theme.colors.dark_yellow}
+            />
+          </TouchableOpacity>
         </View>
       </Animated.View>
 
@@ -189,6 +214,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.gray_900,
+  },
+
+  cartCountContainer: {
+    position: 'absolute',
+    width: 20,
+    height: 20,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.colors.purple,
+    top: -16,
+    right: -16,
+  },
+  cartCountText: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 12,
+    color: theme.colors.white,
   },
 
   fixedHeaderContainer: {

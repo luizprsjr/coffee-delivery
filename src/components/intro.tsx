@@ -1,13 +1,27 @@
+import { useRouter } from 'expo-router'
 import { MagnifyingGlass, MapPin, ShoppingCart } from 'phosphor-react-native'
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import Animated, { SlideInUp } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useSelector } from 'react-redux'
 
 import CoffeeBeans from '../assets/coffee-beans.svg'
+import { RootState } from '../store'
 import { theme } from '../styles/theme'
 
 export function Intro() {
   const { top } = useSafeAreaInsets()
+  const router = useRouter()
+
+  const shoppingCart = useSelector(
+    (state: RootState) => state.shoppingCart.items,
+  )
 
   return (
     <Animated.View
@@ -20,11 +34,21 @@ export function Intro() {
             <MapPin size={20} weight="fill" color={theme.colors.purple} />
             <Text style={styles.locationText}>Barra do Piraí, RJ</Text>
           </View>
-          <ShoppingCart
-            size={20}
-            weight="fill"
-            color={theme.colors.dark_yellow}
-          />
+          <TouchableOpacity
+            hitSlop={{ top: 20, left: 20, right: 20, bottom: 20 }}
+            onPress={() => router.push('cart')}
+          >
+            {shoppingCart.length > 0 && (
+              <View style={styles.cartCountContainer}>
+                <Text style={styles.cartCountText}>{shoppingCart.length}</Text>
+              </View>
+            )}
+            <ShoppingCart
+              size={20}
+              weight="fill"
+              color={theme.colors.dark_yellow}
+            />
+          </TouchableOpacity>
         </View>
 
         <Text style={styles.title}>
@@ -65,6 +89,24 @@ const styles = StyleSheet.create({
     fontFamily: theme.fonts.regular,
     fontSize: 14,
   },
+
+  cartCountContainer: {
+    position: 'absolute',
+    width: 20,
+    height: 20,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.colors.purple,
+    top: -16,
+    right: -16,
+  },
+  cartCountText: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 12,
+    color: theme.colors.white,
+  },
+
   title: {
     marginTop: 48,
     fontSize: 20,
