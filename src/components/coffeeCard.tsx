@@ -33,7 +33,7 @@ export function CoffeeCard({ item }: CardProps) {
         <Text style={styles.cardDescription}>{item.description}</Text>
         <View style={styles.priceContainer}>
           <Text style={styles.price$}>
-            R$ <Text style={styles.price}>{item.price}</Text>
+            R$ <Text style={styles.price}>{item.price.toFixed(2)}</Text>
           </Text>
         </View>
       </View>

@@ -36,7 +36,7 @@ export const coffeeList = [
         name: 'Expresso Tradicional',
         type: 'tradicional',
         description: 'O tradicional café feito com água quente e grãos moídos',
-        price: 9.99,
+        price: 9.9,
         svg: Expresso,
       },
       {
@@ -44,7 +44,7 @@ export const coffeeList = [
         name: 'Expresso Americano',
         type: 'tradicional',
         description: 'Expresso diluído, menos intenso que o tradicional',
-        price: 9.99,
+        price: 9.9,
         svg: Americano,
       },
       {
@@ -52,7 +52,7 @@ export const coffeeList = [
         name: 'Expresso Cremoso',
         type: 'tradicional',
         description: 'Café expresso tradicional com espuma cremosa',
-        price: 9.99,
+        price: 9.9,
         svg: ExpressoCremoso,
       },
       {
@@ -60,7 +60,7 @@ export const coffeeList = [
         name: 'Latte',
         type: 'tradicional',
         description: 'Café expresso com o dobro de leite e espuma cremosa',
-        price: 9.99,
+        price: 9.9,
         svg: Late,
       },
       {
@@ -68,7 +68,7 @@ export const coffeeList = [
         name: 'Expresso Gelado',
         type: 'tradicional',
         description: 'Bebida preparada com café expresso e cubos de gelo',
-        price: 9.99,
+        price: 9.9,
         svg: Gelado,
       },
     ],
@@ -81,7 +81,7 @@ export const coffeeList = [
         name: 'Capuccino',
         type: 'doce',
         description: 'Bebida com canela feita de doses de café, leite e espuma',
-        price: 9.99,
+        price: 9.9,
         svg: Capuccino,
       },
       {
@@ -90,7 +90,7 @@ export const coffeeList = [
         type: 'doce',
         description:
           'Café expresso com calda de chocolate, pouco leite e espuma',
-        price: 9.99,
+        price: 9.9,
         svg: Mocaccino,
       },
       {
@@ -99,7 +99,7 @@ export const coffeeList = [
         type: 'doce',
         description:
           'Bebida feita com chocolate dissolvido no leite quente e café',
-        price: 9.99,
+        price: 9.9,
         svg: ChocolateQuente,
       },
     ],
@@ -113,7 +113,7 @@ export const coffeeList = [
         type: 'especial',
         description:
           'Drink gelado de café expresso com rum, creme de leite e hortelã',
-        price: 9.99,
+        price: 9.9,
         svg: Cubano,
       },
       {
@@ -121,7 +121,7 @@ export const coffeeList = [
         name: 'Havaiano',
         type: 'especial',
         description: 'Bebida adocicada preparada com café e leite de coco',
-        price: 9.99,
+        price: 9.9,
         svg: Havaiano,
       },
       {
@@ -129,7 +129,7 @@ export const coffeeList = [
         name: 'Árabe',
         type: 'especial',
         description: 'Bebida preparada com grãos de café árabe e especiarias',
-        price: 9.99,
+        price: 9.9,
         svg: Arabe,
       },
       {
@@ -138,7 +138,7 @@ export const coffeeList = [
         type: 'especial',
         description:
           'Bebida a base de café, uísque irlandês, açúcar e chantilly',
-        price: 9.99,
+        price: 9.9,
         svg: Irlandes,
       },
     ],

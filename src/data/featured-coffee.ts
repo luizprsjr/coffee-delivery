@@ -8,7 +8,7 @@ export const featuredCoffee = [
     name: 'Latte',
     type: 'tradicional',
     description: 'Café expresso com o dobro de leite e espuma cremosa',
-    price: 9.99,
+    price: 9.9,
     svg: Late,
   },
   {
@@ -16,7 +16,7 @@ export const featuredCoffee = [
     name: 'Mocaccino',
     type: 'doce',
     description: 'Café expresso com calda de chocolate, leite e espuma',
-    price: 9.99,
+    price: 9.9,
     svg: Mocaccino,
   },
   {
@@ -24,7 +24,7 @@ export const featuredCoffee = [
     name: 'Irlandês',
     type: 'especial',
     description: 'Bebida a base de café, uísque irlandês, açúcar e chantilly',
-    price: 9.99,
+    price: 9.9,
     svg: Irlandes,
   },
 ]
