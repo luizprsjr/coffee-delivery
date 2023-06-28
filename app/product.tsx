@@ -45,7 +45,7 @@ export default function Product() {
   }
 
   function handleDecreaseQuantity() {
-    setQuantity((prev) => prev - 1)
+    if (quantity > 1) setQuantity((prev) => prev - 1)
   }
 
   return (
