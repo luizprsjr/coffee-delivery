@@ -27,13 +27,14 @@ export default function Layout() {
           screenOptions={{
             headerShown: false,
             contentStyle: { backgroundColor: 'transparent' },
-            animation: 'fade',
+            animation: 'none',
           }}
         >
           <Stack.Screen name="index" redirect={!hasLoadedFonts} />
           <Stack.Screen name="splash" />
           <Stack.Screen name="product" />
           <Stack.Screen name="cart" />
+          <Stack.Screen name="confirmation" />
         </Stack>
       </Provider>
     </>

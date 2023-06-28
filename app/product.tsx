@@ -36,7 +36,7 @@ export default function Product() {
           size,
         }),
       )
-      router.push('cart')
+      router.push('/')
     }
   }
 

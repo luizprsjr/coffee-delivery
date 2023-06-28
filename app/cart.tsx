@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
@@ -13,6 +14,7 @@ import { theme } from '../src/styles/theme'
 
 export default function Cart() {
   const [total, setTotal] = useState(0)
+  const router = useRouter()
 
   const { bottom } = useSafeAreaInsets()
   const shoppingCart = useSelector(
@@ -63,7 +65,10 @@ export default function Cart() {
             <Text style={styles.price}>R$ {total.toFixed(2)}</Text>
           </View>
 
-          <TouchableOpacity style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => router.push('confirmation')}
+          >
             <Text style={styles.buttonText}>CONFIRMAR PEDIDO</Text>
           </TouchableOpacity>
         </View>
