@@ -1,6 +1,11 @@
 import { useRouter } from 'expo-router'
 import { StyleSheet, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import Animated, {
+  BounceInLeft,
+  FadeIn,
+  Keyframe,
+} from 'react-native-reanimated'
 
 import Illustration from '../src/assets/Illustration.svg'
 import { theme } from '../src/styles/theme'
@@ -8,20 +13,39 @@ import { theme } from '../src/styles/theme'
 export default function Confirmation() {
   const router = useRouter()
 
+  const brandEnteringKeyFrame = new Keyframe({
+    0: {
+      transform: [{ translateY: 30 }],
+    },
+    50: {
+      transform: [{ translateY: -5 }],
+    },
+    100: {
+      transform: [{ translateY: 0 }],
+    },
+  })
+
   return (
     <View style={styles.container}>
-      <Illustration />
-      <Text style={styles.title}>Uhu! Pedido confirmado</Text>
-      <Text style={styles.subTitle}>
-        Agora é só aguardar que logo o café{'\n'}chegará até você!
-      </Text>
+      <Animated.View entering={BounceInLeft.duration(700)}>
+        <Illustration />
+      </Animated.View>
 
-      <TouchableOpacity
-        onPress={() => router.push('/')}
-        style={styles.buttonContainer}
-      >
-        <Text style={styles.buttonText}>IR PARA HOME</Text>
-      </TouchableOpacity>
+      <Animated.View entering={brandEnteringKeyFrame.duration(700)}>
+        <Text style={styles.title}>Uhu! Pedido confirmado</Text>
+        <Text style={styles.subTitle}>
+          Agora é só aguardar que logo o café{'\n'}chegará até você!
+        </Text>
+      </Animated.View>
+
+      <Animated.View entering={FadeIn.delay(700).duration(200)}>
+        <TouchableOpacity
+          onPress={() => router.push('/')}
+          style={styles.buttonContainer}
+        >
+          <Text style={styles.buttonText}>IR PARA HOME</Text>
+        </TouchableOpacity>
+      </Animated.View>
     </View>
   )
 }
@@ -51,7 +75,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 69,
     borderRadius: 6,
-    backgroundColor: theme.colors.purple,
+    backgroundColor: theme.colors.dark_purple,
   },
   buttonText: {
     fontFamily: theme.fonts.bold,
