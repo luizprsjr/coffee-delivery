@@ -1,4 +1,5 @@
 import { StatusBar } from 'expo-status-bar'
+import { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -11,6 +12,8 @@ import { RootState } from '../src/store/index'
 import { theme } from '../src/styles/theme'
 
 export default function Cart() {
+  const [total, setTotal] = useState(0)
+
   const { bottom } = useSafeAreaInsets()
   const shoppingCart = useSelector(
     (state: RootState) => state.shoppingCart.items,
@@ -31,7 +34,13 @@ export default function Cart() {
     }))
   })
 
-  console.log(cartItems)
+  useEffect(() => {
+    const total = cartItems.reduce((accumulator, item) => {
+      return accumulator + item.price * item.quantity
+    }, 0)
+
+    setTotal(total)
+  }, [cartItems])
 
   return (
     <>
@@ -51,7 +60,7 @@ export default function Cart() {
         >
           <View style={styles.priceContainer}>
             <Text style={styles.priceLabel}>Valor total</Text>
-            <Text style={styles.price}>R$ 9.99</Text>
+            <Text style={styles.price}>R$ {total.toFixed(2)}</Text>
           </View>
 
           <TouchableOpacity style={styles.buttonContainer}>
