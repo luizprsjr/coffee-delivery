@@ -1,8 +1,10 @@
 import { Minus, Plus, Trash } from 'phosphor-react-native'
 import { useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useDispatch } from 'react-redux'
 
 import { Coffee } from '../data/coffee-list'
+import { decreaseQuantity, increaseQuantity } from '../store/cart'
 import { theme } from '../styles/theme'
 
 interface Item extends Coffee {
@@ -17,13 +19,23 @@ interface Props {
 export function CartItem({ item }: Props) {
   const CoffeeImg = item.svg
   const [quantity, setQuantity] = useState(item.quantity)
+  const dispatch = useDispatch()
+  const storedItem = {
+    id: item.id,
+    size: item.size,
+    quantity,
+  }
 
   function handleIncreaseQuantity() {
     setQuantity((prev) => prev + 1)
+    dispatch(increaseQuantity(storedItem))
   }
 
   function handleDecreaseQuantity() {
-    if (quantity > 1) setQuantity((prev) => prev - 1)
+    if (quantity > 1) {
+      setQuantity((prev) => prev - 1)
+      dispatch(decreaseQuantity(storedItem))
+    }
   }
 
   return (
@@ -53,7 +65,7 @@ export function CartItem({ item }: Props) {
           </View>
         </View>
 
-        <Text style={styles.price}>R$ {item.price}</Text>
+        <Text style={styles.price}>R$ {item.price * item.quantity}</Text>
       </View>
     </View>
   )
