@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 
 import { Coffee } from '../data/coffee-list'
-import { decreaseQuantity, increaseQuantity } from '../store/cart'
+import { decreaseQuantity, increaseQuantity, removeItem } from '../store/cart'
 import { theme } from '../styles/theme'
 
 interface Item extends Coffee {
@@ -38,6 +38,10 @@ export function CartItem({ item }: Props) {
     }
   }
 
+  function deleteItem() {
+    dispatch(removeItem(storedItem))
+  }
+
   return (
     <View style={styles.container}>
       <CoffeeImg width={64} height={64} />
@@ -59,13 +63,15 @@ export function CartItem({ item }: Props) {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.trash}>
+            <TouchableOpacity onPress={deleteItem} style={styles.trash}>
               <Trash size={20} color={theme.colors.purple} />
             </TouchableOpacity>
           </View>
         </View>
 
-        <Text style={styles.price}>R$ {item.price * item.quantity}</Text>
+        <Text style={styles.price}>
+          R$ {(item.price * item.quantity).toFixed(2)}
+        </Text>
       </View>
     </View>
   )
