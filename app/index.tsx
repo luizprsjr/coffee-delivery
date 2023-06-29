@@ -1,7 +1,7 @@
-import { useRouter } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { StatusBar, StatusBarStyle } from 'expo-status-bar'
-import { MapPin, ShoppingCart } from 'phosphor-react-native'
-import { useRef, useState } from 'react'
+import { ArrowRight, MapPin, ShoppingCart } from 'phosphor-react-native'
+import { useEffect, useRef, useState } from 'react'
 import {
   Platform,
   SectionList,
@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native'
 import Animated, {
+  FadeInUp,
   interpolateColor,
   runOnJS,
   SlideInDown,
@@ -37,8 +38,10 @@ export default function Index() {
   const [currentSection, setCurrentSection] = useState('')
   const [isButtonChangeBlocked, setIsButtonChangeBlocked] = useState(false)
   const [statusBarColor, setStatusBarColor] = useState<StatusBarStyle>('light')
+  const [isToggleVisible, setIsToggleVisible] = useState(false)
 
   const router = useRouter()
+  const { id, name, quantity, size } = useLocalSearchParams()
   const translateY = useSharedValue(0)
   const { top } = useSafeAreaInsets()
 
@@ -131,6 +134,15 @@ export default function Index() {
     }, 500)
   }
 
+  useEffect(() => {
+    if (id) {
+      setIsToggleVisible(true)
+    }
+    setTimeout(() => {
+      setIsToggleVisible(false)
+    }, 5000)
+  }, [id])
+
   return (
     <View style={styles.container}>
       <StatusBar style={statusBarColor} translucent />
@@ -206,6 +218,43 @@ export default function Index() {
         }}
         renderItem={({ item }) => <CoffeeCard item={item} />}
       />
+
+      {isToggleVisible && (
+        <Animated.View
+          entering={FadeInUp.duration(400)}
+          style={styles.toggleContainer}
+        >
+          <View>
+            {shoppingCart.length > 0 && (
+              <View style={styles.toggleCartCountContainer}>
+                <Text style={styles.cartCountText}>{shoppingCart.length}</Text>
+              </View>
+            )}
+            <View style={styles.toggleIconContainer}>
+              <ShoppingCart
+                size={20}
+                weight="fill"
+                color={theme.colors.white}
+              />
+            </View>
+          </View>
+
+          <Text style={styles.toggleRegularText}>
+            {quantity} {+quantity > 1 ? 'cafés' : 'café'}{' '}
+            <Text style={styles.toggleBoldText}>{name}</Text> de{' '}
+            <Text style={styles.toggleBoldText}>{size}ml</Text> adicionado ao
+            carrinho
+          </Text>
+
+          <TouchableOpacity
+            style={styles.toggleButtonContainer}
+            onPress={() => router.push('cart')}
+          >
+            <Text style={styles.toggleButtonText}>VER</Text>
+            <ArrowRight size={20} color={theme.colors.purple} />
+          </TouchableOpacity>
+        </Animated.View>
+      )}
     </View>
   )
 }
@@ -289,5 +338,56 @@ const styles = StyleSheet.create({
     color: theme.colors.gray_400,
     paddingHorizontal: 32,
     marginBottom: 24,
+  },
+
+  toggleContainer: {
+    position: 'absolute',
+    flexDirection: 'row',
+    gap: 20,
+    paddingHorizontal: 32,
+    paddingVertical: 28,
+    bottom: 0,
+    width: '100%',
+    backgroundColor: 'white',
+  },
+  toggleCartCountContainer: {
+    position: 'absolute',
+    width: 20,
+    height: 20,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.colors.purple,
+    top: -8,
+    right: -8,
+    zIndex: 1,
+  },
+  toggleIconContainer: {
+    padding: 8,
+    backgroundColor: theme.colors.gray_500,
+    borderRadius: 6,
+  },
+  toggleRegularText: {
+    flex: 1,
+    fontFamily: theme.fonts.regular,
+    fontSize: 14,
+    color: theme.colors.gray_400,
+  },
+  toggleBoldText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 14,
+    color: theme.colors.gray_400,
+  },
+  toggleButtonContainer: {
+    flexDirection: 'row',
+    gap: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  toggleButtonText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 12,
+    color: theme.colors.purple,
+    textTransform: 'uppercase',
   },
 })

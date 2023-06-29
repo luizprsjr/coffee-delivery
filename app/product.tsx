@@ -29,14 +29,17 @@ export default function Product() {
     if (!size) return Alert.alert('selecione o tamanho')
 
     if (typeof id === 'string') {
-      dispatch(
-        addItem({
-          id,
-          quantity,
-          size,
-        }),
-      )
-      router.push('/')
+      const newItem = {
+        id,
+        quantity,
+        size,
+      }
+
+      router.push({
+        pathname: '/',
+        params: { ...newItem, name },
+      })
+      dispatch(addItem(newItem))
     }
   }
 
