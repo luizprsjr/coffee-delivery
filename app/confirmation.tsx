@@ -6,12 +6,15 @@ import Animated, {
   FadeIn,
   Keyframe,
 } from 'react-native-reanimated'
+import { useDispatch } from 'react-redux'
 
 import Illustration from '../src/assets/Illustration.svg'
+import { removeAllItems } from '../src/store/cart'
 import { theme } from '../src/styles/theme'
 
 export default function Confirmation() {
   const router = useRouter()
+  const dispatch = useDispatch()
 
   const brandEnteringKeyFrame = new Keyframe({
     0: {
@@ -24,6 +27,11 @@ export default function Confirmation() {
       transform: [{ translateY: 0 }],
     },
   })
+
+  function goHome() {
+    dispatch(removeAllItems())
+    router.push('/')
+  }
 
   return (
     <View style={styles.container}>
@@ -39,10 +47,7 @@ export default function Confirmation() {
       </Animated.View>
 
       <Animated.View entering={FadeIn.delay(700).duration(200)}>
-        <TouchableOpacity
-          onPress={() => router.push('/')}
-          style={styles.buttonContainer}
-        >
+        <TouchableOpacity onPress={goHome} style={styles.buttonContainer}>
           <Text style={styles.buttonText}>IR PARA HOME</Text>
         </TouchableOpacity>
       </Animated.View>
