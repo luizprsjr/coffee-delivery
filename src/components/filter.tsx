@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 
 import { coffeeList } from '../data/coffee-list'
 import { theme } from '../styles/theme'
-import { FilterButton } from './filterButton'
+import { FilterButton } from './FilterButton'
 
 interface FilterProps {
   currentSection: string

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import Coffee from '../src/assets/coffee.svg'
 import Smoke from '../src/assets/smoke.svg'
-import { SizeButton } from '../src/components/sizeButton'
+import { SizeButton } from '../src/components/SizeButton'
 import { RootState } from '../src/store'
 import { addItem } from '../src/store/cart'
 import { theme } from '../src/styles/theme'

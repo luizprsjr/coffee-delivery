@@ -4,7 +4,7 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import { featuredCoffee } from '../data/featured-coffee'
-import { FeaturedCoffeeCard } from './featuredCoffeeCard'
+import { FeaturedCoffeeCard } from './FeaturedCoffeeCard'
 
 export function FeaturedCoffeeList() {
   const translateX = useSharedValue(0)
