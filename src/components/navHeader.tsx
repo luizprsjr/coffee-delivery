@@ -31,6 +31,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 28,
     paddingHorizontal: 32,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.gray_700,
   },
   title: {
     flex: 1,

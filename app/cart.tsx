@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { ShoppingCart } from 'phosphor-react-native'
 import { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
@@ -50,28 +51,50 @@ export default function Cart() {
       <View style={styles.container}>
         <NavHeader title="Carrinho" />
 
-        <FlatList
-          data={cartItems}
-          keyExtractor={(item) => item.cartItemId}
-          renderItem={({ item }) => <CartItem item={item} />}
-          style={styles.flatList}
-        />
+        {cartItems.length > 0 ? (
+          <>
+            <FlatList
+              data={cartItems}
+              keyExtractor={(item) => item.cartItemId}
+              renderItem={({ item }) => <CartItem item={item} />}
+            />
 
-        <View
-          style={[styles.footer, { paddingBottom: bottom > 32 ? bottom : 32 }]}
-        >
-          <View style={styles.priceContainer}>
-            <Text style={styles.priceLabel}>Valor total</Text>
-            <Text style={styles.price}>R$ {total.toFixed(2)}</Text>
+            <View
+              style={[
+                styles.footer,
+                { paddingBottom: bottom > 32 ? bottom : 32 },
+              ]}
+            >
+              <View style={styles.priceContainer}>
+                <Text style={styles.priceLabel}>Valor total</Text>
+                <Text style={styles.price}>R$ {total.toFixed(2)}</Text>
+              </View>
+
+              <TouchableOpacity
+                style={styles.buttonContainer}
+                onPress={() => router.push('confirmation')}
+              >
+                <Text style={styles.buttonText}>CONFIRMAR PEDIDO</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        ) : (
+          <View style={styles.noItemsContainer}>
+            <ShoppingCart
+              size={24}
+              weight="fill"
+              color={theme.colors.gray_500}
+            />
+            <Text style={styles.noItemsText}>Seu carrinho está vazio</Text>
+
+            <TouchableOpacity
+              onPress={() => router.push('/')}
+              style={styles.noItemsButtonContainer}
+            >
+              <Text style={styles.noItemsButtonText}>ver catálogo</Text>
+            </TouchableOpacity>
           </View>
-
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={() => router.push('confirmation')}
-          >
-            <Text style={styles.buttonText}>CONFIRMAR PEDIDO</Text>
-          </TouchableOpacity>
-        </View>
+        )}
       </View>
     </>
   )
@@ -81,10 +104,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.gray_900,
-  },
-  flatList: {
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.gray_700,
   },
   footer: {
     backgroundColor: 'white',
@@ -126,6 +145,30 @@ const styles = StyleSheet.create({
     fontFamily: theme.fonts.bold,
     fontSize: 14,
     lineHeight: 14 * 1.6,
+    color: 'white',
+    textTransform: 'uppercase',
+  },
+  noItemsContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 64,
+  },
+  noItemsText: {
+    marginTop: 15,
+    fontFamily: theme.fonts.regular,
+    fontSize: 14,
+    color: theme.colors.gray_400,
+  },
+  noItemsButtonContainer: {
+    marginTop: 44,
+    paddingVertical: 12,
+    paddingHorizontal: 69,
+    borderRadius: 6,
+    backgroundColor: theme.colors.dark_purple,
+  },
+  noItemsButtonText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 14,
     color: 'white',
     textTransform: 'uppercase',
   },
