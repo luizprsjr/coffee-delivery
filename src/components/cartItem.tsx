@@ -45,8 +45,8 @@ export function CartItem({ item }: Props) {
 
   return (
     <Swipeable
-      overshootLeft={false}
-      onEnded={deleteItem}
+      onSwipeableWillOpen={(direction) => direction === 'left' && deleteItem()}
+      renderRightActions={() => null}
       renderLeftActions={() => (
         <View style={styles.swipeableStyles}>
           <Trash size={28} color={theme.colors.dark_red} />
