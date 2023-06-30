@@ -125,7 +125,7 @@ export default function Product() {
 
           <View style={[styles.priceContainer]}>
             <Text style={styles.price$}>
-              R$ <Text style={styles.price}>{price}</Text>
+              R$ <Text style={styles.price}>{Number(price).toFixed(2)}</Text>
             </Text>
           </View>
         </View>
