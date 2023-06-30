@@ -1,7 +1,14 @@
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ArrowLeft, Minus, Plus, ShoppingCart } from 'phosphor-react-native'
 import { useState } from 'react'
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -24,9 +31,39 @@ export default function Product() {
   const router = useRouter()
   const { id, name, type, price, description } = useLocalSearchParams()
   const { top } = useSafeAreaInsets()
+  const isSizeSelected = useSharedValue(0)
+
+  const reanimatedSelectTitleStyle = useAnimatedStyle(() => {
+    return {
+      color: interpolateColor(
+        isSizeSelected.value,
+        [0, 1],
+        [theme.colors.gray_400, theme.colors.dark_red],
+      ),
+    }
+  })
+
+  const reanimatedSelectBtnSize = useAnimatedStyle(() => {
+    return {
+      flex: 1,
+      height: 40,
+      borderWidth: 1,
+      borderColor: interpolateColor(
+        isSizeSelected.value,
+        [0, 1],
+        ['transparent', theme.colors.dark_red],
+      ),
+      borderRadius: 6,
+    }
+  })
 
   function handleAddItem() {
-    if (!size) return Alert.alert('selecione o tamanho')
+    if (!size) {
+      return (isSizeSelected.value = withSequence(
+        withTiming(1, { duration: 600 }),
+        withTiming(0, { duration: 600 }),
+      ))
+    }
 
     if (typeof id === 'string') {
       const newItem = {
@@ -102,24 +139,32 @@ export default function Product() {
       </View>
 
       <View style={styles.selectCoffeeContainer}>
-        <Text style={styles.selectTitle}>Selecione o tamanho: </Text>
+        <Animated.Text style={[styles.selectTitle, reanimatedSelectTitleStyle]}>
+          Selecione o tamanho:{' '}
+        </Animated.Text>
 
         <View style={styles.buttonsContainer}>
-          <SizeButton
-            size={114}
-            isChecked={size === 114}
-            changeSize={changeCoffeeSize}
-          />
-          <SizeButton
-            size={140}
-            isChecked={size === 140}
-            changeSize={changeCoffeeSize}
-          />
-          <SizeButton
-            size={227}
-            isChecked={size === 227}
-            changeSize={changeCoffeeSize}
-          />
+          <Animated.View style={reanimatedSelectBtnSize}>
+            <SizeButton
+              size={114}
+              isChecked={size === 114}
+              changeSize={changeCoffeeSize}
+            />
+          </Animated.View>
+          <Animated.View style={reanimatedSelectBtnSize}>
+            <SizeButton
+              size={140}
+              isChecked={size === 140}
+              changeSize={changeCoffeeSize}
+            />
+          </Animated.View>
+          <Animated.View style={reanimatedSelectBtnSize}>
+            <SizeButton
+              size={227}
+              isChecked={size === 227}
+              changeSize={changeCoffeeSize}
+            />
+          </Animated.View>
         </View>
 
         <View style={styles.addButtonContainer}>
@@ -256,7 +301,6 @@ const styles = StyleSheet.create({
   selectTitle: {
     fontFamily: theme.fonts.regular,
     fontSize: 14,
-    color: theme.colors.gray_400,
   },
 
   buttonsContainer: {
