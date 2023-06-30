@@ -1,6 +1,7 @@
 import { Minus, Plus, Trash } from 'phosphor-react-native'
 import { useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Swipeable } from 'react-native-gesture-handler'
 import { useDispatch } from 'react-redux'
 
 import { Coffee } from '../data/coffee-list'
@@ -43,41 +44,58 @@ export function CartItem({ item }: Props) {
   }
 
   return (
-    <View style={styles.container}>
-      <CoffeeImg width={64} height={64} />
-      <View style={styles.infoContainer}>
-        <View>
-          <Text style={styles.name}>{item.name}</Text>
-          <Text style={styles.size}>{item.size}ml</Text>
+    <Swipeable
+      overshootLeft={false}
+      onEnded={deleteItem}
+      renderLeftActions={() => (
+        <View style={styles.swipeableStyles}>
+          <Trash size={28} color={theme.colors.dark_red} />
+        </View>
+      )}
+    >
+      <View style={styles.container}>
+        <CoffeeImg width={64} height={64} />
+        <View style={styles.infoContainer}>
+          <View>
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.size}>{item.size}ml</Text>
 
-          <View style={styles.deleteAndQuantityAre}>
-            <View style={styles.quantityContainer}>
-              <TouchableOpacity onPress={handleDecreaseQuantity}>
-                <Minus size={20} color={theme.colors.purple} />
-              </TouchableOpacity>
+            <View style={styles.deleteAndQuantityAre}>
+              <View style={styles.quantityContainer}>
+                <TouchableOpacity onPress={handleDecreaseQuantity}>
+                  <Minus size={20} color={theme.colors.purple} />
+                </TouchableOpacity>
 
-              <Text style={styles.quantityText}>{quantity}</Text>
+                <Text style={styles.quantityText}>{quantity}</Text>
 
-              <TouchableOpacity onPress={handleIncreaseQuantity}>
-                <Plus size={20} color={theme.colors.purple} />
+                <TouchableOpacity onPress={handleIncreaseQuantity}>
+                  <Plus size={20} color={theme.colors.purple} />
+                </TouchableOpacity>
+              </View>
+
+              <TouchableOpacity onPress={deleteItem} style={styles.trash}>
+                <Trash size={20} color={theme.colors.purple} />
               </TouchableOpacity>
             </View>
-
-            <TouchableOpacity onPress={deleteItem} style={styles.trash}>
-              <Trash size={20} color={theme.colors.purple} />
-            </TouchableOpacity>
           </View>
-        </View>
 
-        <Text style={styles.price}>
-          R$ {(item.price * item.quantity).toFixed(2)}
-        </Text>
+          <Text style={styles.price}>
+            R$ {(item.price * item.quantity).toFixed(2)}
+          </Text>
+        </View>
       </View>
-    </View>
+    </Swipeable>
   )
 }
 
 const styles = StyleSheet.create({
+  swipeableStyles: {
+    height: '100%',
+    width: '100%',
+    backgroundColor: theme.colors.light_red,
+    justifyContent: 'center',
+    paddingHorizontal: 32,
+  },
   container: {
     flexDirection: 'row',
     gap: 20,
@@ -85,6 +103,7 @@ const styles = StyleSheet.create({
     paddingVertical: 26,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.gray_700,
+    backgroundColor: theme.colors.gray_900,
   },
   infoContainer: {
     flex: 1,
