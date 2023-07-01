@@ -1,3 +1,4 @@
+import { Audio } from 'expo-av'
 import { useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { ShoppingCart } from 'phosphor-react-native'
@@ -37,6 +38,19 @@ export default function Cart() {
     }))
   })
 
+  async function playConfirmationSound() {
+    const file = require('../src/assets/collect.mp3')
+    const { sound } = await Audio.Sound.createAsync(file, { shouldPlay: true })
+
+    await sound.setPositionAsync(0)
+    await sound.playAsync()
+  }
+
+  function purchaseConfirmation() {
+    playConfirmationSound()
+    router.push('confirmation')
+  }
+
   useEffect(() => {
     const total = cartItems.reduce((accumulator, item) => {
       return accumulator + item.price * item.quantity
@@ -72,7 +86,7 @@ export default function Cart() {
 
               <TouchableOpacity
                 style={styles.buttonContainer}
-                onPress={() => router.push('confirmation')}
+                onPress={purchaseConfirmation}
               >
                 <Text style={styles.buttonText}>CONFIRMAR PEDIDO</Text>
               </TouchableOpacity>
