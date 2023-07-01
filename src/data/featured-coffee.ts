@@ -4,7 +4,7 @@ import Mocaccino from '../assets/mochaccino.svg'
 
 export const featuredCoffee = [
   {
-    id: '1',
+    id: '4',
     name: 'Latte',
     type: 'tradicional',
     description: 'Café expresso com o dobro de leite e espuma cremosa',
@@ -12,7 +12,7 @@ export const featuredCoffee = [
     svg: Late,
   },
   {
-    id: '2',
+    id: '7',
     name: 'Mocaccino',
     type: 'doce',
     description: 'Café expresso com calda de chocolate, leite e espuma',
@@ -20,7 +20,7 @@ export const featuredCoffee = [
     svg: Mocaccino,
   },
   {
-    id: '3',
+    id: '12',
     name: 'Irlandês',
     type: 'especial',
     description: 'Bebida a base de café, uísque irlandês, açúcar e chantilly',

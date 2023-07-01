@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { useRouter } from 'expo-router'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated, {
   interpolate,
   SlideInRight,
@@ -15,8 +16,12 @@ type CardProps = {
   translateX: Animated.SharedValue<number>
 }
 
+const PressableAnimated = Animated.createAnimatedComponent(Pressable)
+
 export function FeaturedCoffeeCard({ index, data, translateX }: CardProps) {
   const CoffeeImg = data.svg
+
+  const router = useRouter()
 
   const rStyleContainer = useAnimatedStyle(() => {
     const scale = interpolate(
@@ -67,7 +72,13 @@ export function FeaturedCoffeeCard({ index, data, translateX }: CardProps) {
   })
 
   return (
-    <Animated.View
+    <PressableAnimated
+      onPress={() =>
+        router.push({
+          pathname: '/product',
+          params: data,
+        })
+      }
       entering={SlideInRight.delay(index * 100 + 1000).duration(1000)}
       style={[styles.container, rStyleContainer]}
     >
@@ -95,7 +106,7 @@ export function FeaturedCoffeeCard({ index, data, translateX }: CardProps) {
           </View>
         </Animated.View>
       </Animated.View>
-    </Animated.View>
+    </PressableAnimated>
   )
 }
 
