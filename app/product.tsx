@@ -1,3 +1,4 @@
+import { Audio } from 'expo-av'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ArrowLeft, Minus, Plus, ShoppingCart } from 'phosphor-react-native'
 import { useState } from 'react'
@@ -56,8 +57,17 @@ export default function Product() {
     }
   })
 
+  async function playUnselectedSizeSound() {
+    const file = require('../src/assets/wrong.mp3')
+    const { sound } = await Audio.Sound.createAsync(file, { shouldPlay: true })
+
+    await sound.setPositionAsync(0)
+    await sound.playAsync()
+  }
+
   function handleAddItem() {
     if (!size) {
+      playUnselectedSizeSound()
       return (isSizeSelected.value = withSequence(
         withTiming(1, { duration: 600 }),
         withTiming(0, { duration: 600 }),
