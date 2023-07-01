@@ -20,7 +20,7 @@ export default function Splash() {
 
   function goBack() {
     setTimeout(() => {
-      router.push('/')
+      router.replace('/')
     }, 1000)
   }
 
