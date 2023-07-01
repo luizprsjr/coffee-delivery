@@ -12,8 +12,7 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Coffee from '../src/assets/coffee.svg'
-import Smoke from '../src/assets/smoke.svg'
+import { AnimatedCoffee } from '../src/components/AnimatedCoffee'
 import { SizeButton } from '../src/components/SizeButton'
 import { RootState } from '../src/store'
 import { addItem } from '../src/store/cart'
@@ -132,10 +131,7 @@ export default function Product() {
 
         <Text style={styles.description}>{description}</Text>
 
-        <View style={styles.coffeeImageContainer}>
-          <Smoke style={styles.smoke} />
-          <Coffee style={styles.coffee} />
-        </View>
+        <AnimatedCoffee />
       </View>
 
       <View style={styles.selectCoffeeContainer}>
@@ -181,7 +177,10 @@ export default function Product() {
           </View>
 
           <View style={{ flex: 1 }}>
-            <TouchableOpacity style={styles.addButton} onPress={handleAddItem}>
+            <TouchableOpacity
+              style={[styles.addButton, { opacity: size ? 1 : 0.3 }]}
+              onPress={handleAddItem}
+            >
               <Text style={styles.addButtonText}>ADICIONAR</Text>
             </TouchableOpacity>
           </View>
@@ -275,23 +274,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.gray_500,
     marginTop: 20,
-  },
-
-  coffeeImageContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    marginTop: 32,
-    marginBottom: -74,
-  },
-  smoke: {
-    alignSelf: 'center',
-    marginBottom: -62,
-    zIndex: 1,
-  },
-  coffee: {
-    alignSelf: 'center',
   },
 
   selectCoffeeContainer: {
